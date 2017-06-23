@@ -1,0 +1,57 @@
+{
+    "name": "nativescript-sentry",
+    "version": "1.0.0",
+    "description": "Your awesome NativeScript plugin.",
+    "main": "sentry",
+    "typings": "index.d.ts",
+    "nativescript": {
+        "platforms": {
+            "android": "3.0.0",
+            "ios": "3.0.0"
+        }
+    },
+    "scripts": {
+        "tsc": "tsc -skipLibCheck",
+        "postclone": "npm i && node scripts/postclone.js && cd ../demo && npm i && cd ../src && npm run plugin.link",
+        "test.android": "npm i && npm run tsc && npm run tslint && cd ../demo && tns build android && tns test android --justlaunch",
+        "test.ios": "npm i && npm run tsc && npm run tslint && cd ../demo && tns build ios && tns test ios --justlaunch",
+        "tslint": "cd .. && tslint \"**/*.ts\" --config tslint.json --exclude \"**/node_modules/**\"",
+        "plugin.link": "npm link && cd ../demo && npm link nativescript-sentry && cd ../src",
+        "plugin.tscwatch": "npm run tsc -- -w",
+        "demo.ios": "npm i && npm run tsc && cd ../demo && tns run ios --syncAllFiles",
+        "demo.android": "npm i && npm run tsc && cd ../demo && tns run android --syncAllFiles"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/danielgek/nativescript-sentry.git"
+    },
+    "keywords": [
+        "NativeScript",
+        "JavaScript",
+        "Android",
+        "iOS"
+    ],
+    "author": {
+        "name": "Your Name",
+        "email": "youremail@yourdomain.com"
+    },
+    "bugs": {
+        "url": "https://github.com/danielgek/nativescript-sentry/issues"
+    },
+    "license": "Apache-2.0",
+    "homepage": "https://github.com/danielgek/nativescript-sentry",
+    "readmeFilename": "README.md",
+    "peerDependencies": {
+        "tns-core-modules": "^3.0.0"
+    },
+    "devDependencies": {
+        "tns-core-modules": "^3.0.0",
+        "tns-platform-declarations": "^3.0.0",
+        "typescript": "^2.2.2",
+        "prompt": "^1.0.0",
+        "rimraf": "^2.5.0",
+        "tslint": "^5.0.0"
+    },
+    "dependencies": {},
+    "bootstrapper": "nativescript-plugin-seed"
+}
