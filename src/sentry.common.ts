@@ -8,16 +8,4 @@ export class Common extends Observable {
   constructor() {
     super();
   }
-
-  enableDebug() {
-    this.debug = true;
-  }
-
-  disableDebug() {
-    this.debug = false;
-  }
-
-  public log(message: string ,error) {
-    console.log(message,error);
-  }
 }

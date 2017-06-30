@@ -5,6 +5,11 @@ import { SentryAppDelegate } from './sentry.appdelegate';
 declare var SentryClient, SentrySeverity, SentryEvent : any;
 
 export class Sentry extends Common {
+    private static getErrorDetails(args: any): any {
+        let error = args.ios;
+        return error;
+    }
+
     public static init(dsn: string) {
 
         try {
@@ -23,7 +28,7 @@ export class Sentry extends Common {
     public static capture(error: any) {
         try {
             let event = new SentryEvent({ level: SentrySeverity.Error }); //if this fails try SentryEvent.alloc()
-            event.message = error;
+            event.message = this.getErrorDetails(error);
             
             SentryClient.sharedClient.sendEventWithCompletionHandler(event, (error) => {
                 if (error) {
