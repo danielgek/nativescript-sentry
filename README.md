@@ -1,40 +1,52 @@
-# Your Plugin Name
+# Sentry.io for nativescript
 
-Add your plugin badges here. See [nativescript-urlhandler](https://github.com/hypery2k/nativescript-urlhandler) for example.
+This plugin uses sentry-android and sentry-cocoa to catch native errors/stack traces and send them to a sentry server.
 
-Then describe what's the purpose of your plugin. 
-
-In case you develop UI plugin, this is where you can add some screenshots.
-
-## (Optional) Prerequisites / Requirements
-
-Describe the prerequisites that the user need to have installed before using your plugin. See [nativescript-firebase plugin](https://github.com/eddyverbruggen/nativescript-plugin-firebase) for example.
+**NOTE:** If you have a **native exeption** and the app exits the plugin will save the log and send it in the **next app startup**, this is how the native plugins are implemented and it is expected behavior
 
 ## Installation
 
-Describe your plugin installation steps. Ideally it would be something like:
-
 ```javascript
-tns plugin add <your-plugin-name>
+tns plugin add nativescript-sentry
 ```
 
 ## Usage 
 
-Describe any usage specifics for your plugin. Give examples for Android, iOS, Angular if needed. See [nativescript-drop-down](https://www.npmjs.com/package/nativescript-drop-down) for example.
-	
-	```javascript
-    Usage code snippets here
-    ```)
+### Without Angular
+```typescript
+import { Sentry } from 'nativescript-sentry';
+const dsn = 'https://<key>:<secret>@host/<project>';
+Sentry.init(dns);
+```
+### With Angular
+```typescript
+import { SentryModule } from 'nativescript-sentry';
+
+NgModule({
+  ...
+  imports: [
+       SentryModule.forRoot({dns: 'https://<key>:<secret>@host/<project>'})
+  ],
+
+```
 
 ## API
 
-Describe your plugin methods and properties here. See [nativescript-feedback](https://github.com/EddyVerbruggen/nativescript-feedback) for example.
-    
-| Property | Default | Description |
-| --- | --- | --- |
-| some property | property default value | property description, default values, etc.. |
-| another property | property default value | property description, default values, etc.. |
-    
-## License
+### Init Raven
 
-Apache License Version 2.0, January 2004
+`Sentry.init(dsn: string);`
+
+### Capture exeption
+
+`Sentry.capture(error: any);`
+
+Example: 
+```
+try {
+    throw 'try catch exeption example'
+} catch(error) { 
+    Sentry.capture(error);
+}
+```
+
+
