@@ -13,13 +13,18 @@ import { ItemDetailComponent } from "./item/item-detail.component";
 // Uncomment and add to NgModule imports  if you need to use the HTTP wrapper
 // import { NativeScriptHttpModule } from "nativescript-angular/http";
 
+import { SentryModule } from 'nativescript-sentry/angular';
+
+
+
 @NgModule({
     bootstrap: [
         AppComponent
     ],
     imports: [
         NativeScriptModule,
-        AppRoutingModule
+        AppRoutingModule,
+        SentryModule.forRoot({ dsn: 'xvbdbg'})
     ],
     declarations: [
         AppComponent,

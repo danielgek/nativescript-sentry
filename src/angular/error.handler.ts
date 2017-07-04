@@ -1,8 +1,10 @@
-import { ErrorHandler } from '@angular/core';
+import { ErrorHandler, Inject } from '@angular/core';
 import { Sentry } from '../';
+import { SentryConfig } from "./";
 
 export class SentryErrorHandler extends ErrorHandler {
     constructor() {
+        console.log('ErrorHandler')
         super(false);
     }
     

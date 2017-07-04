@@ -16,6 +16,8 @@ demo/*.d.ts
 demo/lib
 demo/platforms
 demo/node_modules
+demo-ng/platforms
+demo-ng/node_modules
 node_modules
 publish/src
 publish/package

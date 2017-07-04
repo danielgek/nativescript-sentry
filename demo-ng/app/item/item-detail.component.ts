@@ -11,7 +11,6 @@ import { ItemService } from "./item.service";
 })
 export class ItemDetailComponent implements OnInit {
     item: Item;
-
     constructor(
         private itemService: ItemService,
         private route: ActivatedRoute
@@ -21,4 +20,6 @@ export class ItemDetailComponent implements OnInit {
         const id = +this.route.snapshot.params["id"];
         this.item = this.itemService.getItem(id);
     }
+
+
 }
