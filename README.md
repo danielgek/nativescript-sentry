@@ -30,6 +30,8 @@ NgModule({
 
 ```
 
+**Note:** this plugin adds a custom ErrorHandler and automatically provides it 
+
 ## API
 
 ### Init Raven
@@ -49,4 +51,14 @@ try {
 }
 ```
 
+Changelog:
+
+**24-07-2017 - (1.1.0):** 
+
+* fix stringify
+* fix angular error handler
+
+## Credits:
+    
+* **@hypery2k**: for his **nativescript-fabric**(helped me a lot!)
 
