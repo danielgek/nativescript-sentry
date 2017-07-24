@@ -1,14 +1,10 @@
 import { ModuleWithProviders, InjectionToken } from '@angular/core';
 export declare const SENTRY_CONFIG: InjectionToken<SentryConfig>;
+export declare class SentryConfig {
+    dsn: string;
+    constructor(config?: SentryConfig);
+}
 export declare class SentryModule {
     constructor(config: SentryConfig);
-    static forRoot(config: ISentryConfig): ModuleWithProviders;
+    static forRoot(config: SentryConfig): ModuleWithProviders;
 }
-export interface ISentryConfig {
-    dsn: string;
-}
-export declare class SentryConfig implements ISentryConfig {
-    dsn: string;
-    constructor(config?: ISentryConfig);
-}
-export declare function provideConfig(config: ISentryConfig): SentryConfig;

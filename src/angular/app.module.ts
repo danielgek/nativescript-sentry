@@ -7,60 +7,48 @@ import {
     NO_ERRORS_SCHEMA,
     Inject,
     InjectionToken,
-    SkipSelf
+    SkipSelf,
+    Injectable
 } from '@angular/core';
 
 import { Sentry } from '../';
 import { SentryErrorHandler } from './error.handler';
 export const SENTRY_CONFIG = new InjectionToken<SentryConfig>('SENTRY_CONFIG');
 
-@NgModule({
-    declarations: [],
-    providers: [],
-    exports: [],
-    schemas: [NO_ERRORS_SCHEMA]
-})
-export class SentryModule {
-    
-    constructor( @Optional() @SkipSelf() config: SentryConfig) {
-        console.log('config here')
-        // console.dir(config);
-        // if (config && config.dsn) {
-        //     Sentry.init(config.dsn);
-        // } else {
-        //     console.error('You need to provide a dsn on the forRoot method');
-        // }
-        console.log('constructor');
-    }
 
-    static forRoot(config: ISentryConfig): ModuleWithProviders {
-        console.log('forroot')
-        return {
-            ngModule: SentryModule,
-            providers: [
-                { provide: SentryConfig, useValue: config },
-                //{ provide: SentryConfig, useFactory: provideConfig, deps: [ SENTRY_CONFIG ] },
-                { provide: ErrorHandler, useClass: SentryErrorHandler },
-            ]
-        };
-    }
-}
-
-export interface ISentryConfig {
-    dsn: string;
-}
-export class SentryConfig implements ISentryConfig {
+@Injectable()
+export class SentryConfig {
     dsn = '';
-    constructor(config?: ISentryConfig) {
-        console.log('SentryConfig');
+    constructor(config?: SentryConfig) {
         if (config.dsn) {
             this.dsn = config.dsn;
         }
     }
 }
 
+@NgModule({
+    declarations: [],
+    providers: [ SentryConfig ],
+    exports: [],
+    schemas: [NO_ERRORS_SCHEMA]
+})
+export class SentryModule {
 
-export function provideConfig(config: ISentryConfig): SentryConfig {
-    console.log('provideConfig')
-    return new SentryConfig(config);
+    constructor( config: SentryConfig) {
+        if (config && config.dsn) {
+            Sentry.init(config.dsn);
+        } else {
+            console.error('You need to provide a dsn on the forRoot method');
+        }
+    }
+
+    static forRoot(config: SentryConfig): ModuleWithProviders {
+        return {
+            ngModule: SentryModule,
+            providers: [
+                { provide: SentryConfig, useValue: config },
+                { provide: ErrorHandler, useClass: SentryErrorHandler },
+            ]
+        };
+    }
 }

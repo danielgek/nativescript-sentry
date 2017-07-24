@@ -4,7 +4,6 @@ import { SentryConfig } from "./";
 
 export class SentryErrorHandler extends ErrorHandler {
     constructor() {
-        console.log('ErrorHandler')
         super(false);
     }
     
@@ -12,6 +11,9 @@ export class SentryErrorHandler extends ErrorHandler {
         super.handleError(err);
         try {
             Sentry.capture(err);
-        } catch (e) { }
+        } catch (e) {
+            console.log('[Sentry - SentryErrorHandler]', e);
+        }
+        throw err;
     }
 }

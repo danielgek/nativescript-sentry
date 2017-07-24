@@ -1,6 +1,5 @@
 import { ErrorHandler } from '@angular/core';
-import { SentryConfig } from "./";
 export declare class SentryErrorHandler extends ErrorHandler {
-    constructor(config: SentryConfig);
+    constructor();
     handleError(err: any): void;
 }
