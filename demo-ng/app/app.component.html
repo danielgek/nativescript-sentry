@@ -1,2 +1,6 @@
-<!-- https://docs.nativescript.org/angular/core-concepts/angular-navigation.html#page-router-outlet -->
-<page-router-outlet></page-router-outlet>
+<ActionBar title="Testing sentry" class="action-bar">
+</ActionBar>
+<StackLayout >
+    <Button (tap)="onTapMain()" text="Main thread exeption" ></Button>
+    <Button (tap)="onTapTry()" text="Inside of try trow test" ></Button>
+</StackLayout>

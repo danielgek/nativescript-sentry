@@ -5,4 +5,17 @@ import { Component } from "@angular/core";
     templateUrl: "app.component.html",
 })
 
-export class AppComponent { }
+export class AppComponent { 
+    onTapTry(eventData) {
+        try {
+            throw 'try catch exeption example'
+        } catch (error) {
+            console.log('Exeption')
+            console.log(error);
+        }
+    }
+
+    onTapMain(eventData) {
+        throw 'Test Sentry on Main thread'
+    }
+}
