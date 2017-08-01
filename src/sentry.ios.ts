@@ -6,7 +6,12 @@ declare var SentryClient, SentrySeverity, SentryEvent : any;
 
 export class Sentry extends Common {
     private static getErrorDetails(args: any): any {
-        let error = args.ios;
+        let error;
+        if (args.ios) {
+            error = args.ios;
+        } else {
+            error = args;
+        }
         return error;
     }
 
@@ -27,9 +32,9 @@ export class Sentry extends Common {
     
     public static capture(error: any) {
         try {
-            let event = new SentryEvent({ level: SentrySeverity.Error }); //if this fails try SentryEvent.alloc()
+            let event = SentryEvent.alloc().initWithLevel(SentrySeverity.Error); //if this fails try SentryEvent.alloc()
             event.message = this.getErrorDetails(error);
-            
+            console.log(this.getErrorDetails(error))
             SentryClient.sharedClient.sendEventWithCompletionHandler(event, (error) => {
                 if (error) {
                     console.log('[Sentry - iOS] Exeption on capture: ', error);
