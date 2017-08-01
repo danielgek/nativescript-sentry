@@ -34,7 +34,6 @@ export class Sentry extends Common {
         try {
             let event = SentryEvent.alloc().initWithLevel(SentrySeverity.Error); //if this fails try SentryEvent.alloc()
             event.message = this.getErrorDetails(error);
-            console.log(this.getErrorDetails(error))
             SentryClient.sharedClient.sendEventWithCompletionHandler(event, (error) => {
                 if (error) {
                     console.log('[Sentry - iOS] Exeption on capture: ', error);
