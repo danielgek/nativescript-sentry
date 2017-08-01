@@ -51,7 +51,7 @@ try {
 }
 ```
 
-Changelog:
+### Changelog:
 
 **2-08-2017 - (1.2.0):** 
 * update demos dependencies 
