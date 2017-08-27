@@ -10,13 +10,13 @@ This plugin uses sentry-android and sentry-cocoa to catch native errors/stack tr
 tns plugin add nativescript-sentry
 ```
 
-## Usage 
+## Usage
 
 ### Without Angular
 ```typescript
 import { Sentry } from 'nativescript-sentry';
 const dsn = 'https://<key>:<secret>@host/<project>';
-Sentry.init(dns);
+Sentry.init(dsn);
 ```
 ### With Angular
 ```typescript
@@ -25,12 +25,12 @@ import { SentryModule } from 'nativescript-sentry';
 NgModule({
   ...
   imports: [
-       SentryModule.forRoot({dns: 'https://<key>:<secret>@host/<project>'})
+       SentryModule.forRoot({dsn: 'https://<key>:<secret>@host/<project>'})
   ],
 
 ```
 
-**Note:** this plugin adds a custom ErrorHandler and automatically provides it 
+**Note:** this plugin adds a custom ErrorHandler and automatically provides it
 
 ## API
 
@@ -42,28 +42,28 @@ NgModule({
 
 `Sentry.capture(error: any);`
 
-Example: 
+Example:
 ```
 try {
     throw 'try catch exeption example'
-} catch(error) { 
+} catch(error) {
     Sentry.capture(error);
 }
 ```
 
 ### Changelog:
 
-**2-08-2017 - (1.2.0):** 
-* update demos dependencies 
-* update ios and android native dependencies 
+**2-08-2017 - (1.2.0):**
+* update demos dependencies
+* update ios and android native dependencies
 * fix ios event capture
 
-**24-07-2017 - (1.1.0):** 
+**24-07-2017 - (1.1.0):**
 
 * fix stringify
 * fix angular error handler
 
 ## Credits:
-    
+
 * **@hypery2k**: for his **nativescript-fabric**(helped me a lot!)
 
