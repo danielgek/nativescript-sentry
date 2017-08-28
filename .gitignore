@@ -21,3 +21,5 @@ demo-ng/node_modules
 node_modules
 publish/src
 publish/package
+**/*.metadata.json
+**/*.ngsummary.json

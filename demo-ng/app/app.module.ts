@@ -9,7 +9,6 @@ import { SentryModule } from 'nativescript-sentry/angular';
     ],
     imports: [
         NativeScriptModule,
-        AppRoutingModule,
         SentryModule.forRoot({ dsn: 'xvbdbg'})
     ],
     declarations: [
@@ -20,5 +19,4 @@ import { SentryModule } from 'nativescript-sentry/angular';
         NO_ERRORS_SCHEMA
     ]
 })
-
 export class AppModule { }
