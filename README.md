@@ -53,6 +53,10 @@ try {
 
 ### Changelog:
 
+**28-08-2017 - (1.3.0):**
+* fix Aot compilation for angular apps
+* fix typos thanks to @muratcorlu 
+
 **2-08-2017 - (1.2.0):**
 * update demos dependencies
 * update ios and android native dependencies
