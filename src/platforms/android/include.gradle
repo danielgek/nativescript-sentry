@@ -9,7 +9,7 @@ android {
 }
 
 dependencies {
-	compile 'io.sentry:sentry-android:1.4.0'
+	compile 'io.sentry:sentry-android:1.6.3'
     // Describe plugin native Android dependencies like
 	// compile "groupName:pluginName:ver" 
     // EXAMPLE: compile "com.facebook.fresco:fresco:0.9.0+"
