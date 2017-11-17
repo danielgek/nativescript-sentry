@@ -92,9 +92,6 @@ export class Sentry extends Common {
                     );
             });
 
-            let throwable: java.lang.Throwable = new java.lang.Throwable();
-            throwable.setStackTrace(stackArray);
-
             let event = new io.sentry.event.EventBuilder()
                 .withMessage(`Name: ${error.name} | Message: ${error.message}`)
                 .withLevel(io.sentry.event.Event.Level.ERROR)
