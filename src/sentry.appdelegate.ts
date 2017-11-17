@@ -1,6 +1,4 @@
-/// <reference path="node_modules/tns-platform-declarations/ios/ios.d.ts" />
 
-declare var SentryClient: any;
 
 export class SentryAppDelegate extends UIResponder implements UIApplicationDelegate {
 
