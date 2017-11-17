@@ -1,4 +1,4 @@
-```typescript
+
 
 declare function NSErrorFromSentryError(error: SentryError, description: string): NSError;
 
@@ -191,6 +191,8 @@ declare class SentryClient extends NSObject {
 	snapshotStacktrace(snapshotCompleted: () => void): void;
 
 	startCrashHandlerWithError(): boolean;
+
+	storeEvent(event: SentryEvent): void;
 }
 
 declare class SentryContext extends NSObject implements SentrySerializable {
@@ -240,6 +242,13 @@ declare class SentryContext extends NSObject implements SentrySerializable {
 	self(): this;
 
 	serialize(): NSDictionary<string, any>;
+}
+
+declare class SentryCrashExceptionApplication extends NSObject {
+
+	static alloc(): SentryCrashExceptionApplication; // inherited from NSObject
+
+	static new(): SentryCrashExceptionApplication; // inherited from NSObject
 }
 
 declare class SentryDebugMeta extends NSObject implements SentrySerializable {
@@ -380,6 +389,8 @@ declare class SentryEvent extends NSObject implements SentrySerializable {
 	platform: string;
 
 	releaseName: string;
+
+	sdk: NSDictionary<string, any>;
 
 	serverName: string;
 
@@ -963,5 +974,3 @@ declare var SentryVersionNumberVar: number;
 declare var SentryVersionString: interop.Reference<number>;
 
 declare var SentryVersionStringVar: interop.Reference<number>;
-
-```

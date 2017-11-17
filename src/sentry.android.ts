@@ -1,9 +1,10 @@
+/// <reference path="./node_modules/tns-platform-declarations/android.d.ts" />
+/// <reference path="./sentry-api.android.d.ts" />
 import { Common } from './sentry.common';
 import * as application from 'tns-core-modules/application';
 import * as utils from 'tns-core-modules/utils/utils';
 import { stringify } from "./utils/utils";
 
-declare var io: any;
 
 export class Sentry extends Common {
 

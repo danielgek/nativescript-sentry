@@ -1,8 +1,9 @@
+/// <reference path="./node_modules/tns-platform-declarations/ios.d.ts" />
+/// <reference path="./sentry-api.ios.d.ts" />
 import { Common } from './sentry.common';
 import * as application from 'tns-core-modules/application';
 import { SentryAppDelegate } from './sentry.appdelegate';
 
-declare var SentryClient, SentrySeverity, SentryEvent : any;
 
 export class Sentry extends Common {
     private static getErrorDetails(args: any): any {
