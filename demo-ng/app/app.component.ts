@@ -7,7 +7,9 @@ import * as utils from 'utils/utils';
     templateUrl: "app.component.html",
 })
 
-export class AppComponent { 
+export class AppComponent implements OnInit {
+    ngOnInit() {
+    }
     onTapTry(eventData) {
         try {
             throw 'try catch exeption example';
