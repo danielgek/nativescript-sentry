@@ -6,9 +6,9 @@ export class SentryErrorHandler extends ErrorHandler {
     constructor() {
         super(false);
     }
-    
-    handleError(err: any): void {
-        super.handleError(err);
+
+    handleError(err): void {
+        // super.handleError(err);
         try {
             Sentry.capture(err);
         } catch (e) {

@@ -7,7 +7,7 @@ export function stringify(object: any) {
     let seen = [];
 
     return JSON.stringify(object, function (key, val) {
-        if (val != null && typeof val == "object") {
+        if (val != null && typeof val === "object") {
             if (seen.indexOf(val) >= 0) {
                 return;
             }

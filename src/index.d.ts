@@ -1,5 +1,9 @@
+
+
 import { Common } from './sentry.common';
+
 export declare class Sentry extends Common {
-    static init(dsn: string);
-    static capture(error: any);
+    static init(dsn: string): void;
+    static capture(error: any): void;
+    static onBeforeSend(callback: (event: any) => void);
 }
