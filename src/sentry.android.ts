@@ -35,37 +35,19 @@ export class Sentry extends Common {
 
     private static getErrorDetails(error: any): Error {
 
-        console.log('getErrorDetails');
         if (error.android) {
-            console.log('error.android');
             error = error.android;
         }
-        // console.log(error);
-        // console.dir(error);
         if (error instanceof Error) {
-            console.log('is a new Error ');
-            // console.log((error as Error).name);
-            // console.log((error as Error).message);
-            // console.log((error as Error).stack);
             return error;
         } else if (typeof error === 'string') {
-            console.log('this is a string error');
-            console.log(error); 
-            console.dir(new Error(error));
-            // let newError = new Error();
-            // newError.message = error.toString();
-            // newError.name = 'Error';
-            // newError.stack = (error as any ).
             return new Error((error as any).originalStack);
-
         }
-
 
         if (error.android) {
-            console.log('error.android');
             error = error.android;
         }
-        return error;
+        return new Error(JSON.stringify(error));
     }
 
 
