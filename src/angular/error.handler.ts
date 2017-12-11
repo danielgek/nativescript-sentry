@@ -9,8 +9,9 @@ export class SentryErrorHandler extends ErrorHandler {
 
     handleError(err): void {
         // super.handleError(err);
+        console.log('passei no handler de angular');
         try {
-            Sentry.capture(err);
+            Sentry.captureException(err, null);
         } catch (e) {
             console.log('[Sentry - SentryErrorHandler]', e);
         }

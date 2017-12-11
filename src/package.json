@@ -1,6 +1,6 @@
 {
   "name": "nativescript-sentry",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Sentry.io NativeScript plugin.",
   "main": "sentry",
   "typings": "index.d.ts",
@@ -60,8 +60,9 @@
     "zone.js": "0.8.17"
   },
   "dependencies": {
-    "error-stack-parser": "^2.0.1",
-    "stackframe":"~1.0.4"
+    "nativescript-appversion": "^1.4.1",
+    "nativescript-orientation": "^2.1.0",
+    "raven-js": "^3.20.1"
   },
   "bootstrapper": "nativescript-plugin-seed"
 }
