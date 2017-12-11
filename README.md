@@ -84,6 +84,18 @@ try {
 
 ### Changelog:
 
+**11/12/2017 - (1.5.0):**
+
+**BREAKING CHANGES**
+* `capture()` method was deprecated in favor of `captureMessage`/`captureException`
+
+**Features**
+* Moving to an hybrid approach with both clients(web/native)
+* breadcrums
+* tags
+* user info
+* set tags and extra for each event
+
 **28-08-2017 - (1.3.0):**
 * fix Aot compilation for angular apps
 * fix typos thanks to @muratcorlu 
