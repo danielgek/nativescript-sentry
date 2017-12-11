@@ -3,95 +3,92 @@
 import { Common } from './sentry.common';
 import * as application from 'tns-core-modules/application';
 import * as utils from 'tns-core-modules/utils/utils';
-import { stringify } from "./utils/utils";
-import * as ErrorStackParser from 'error-stack-parser';
-
+import { stringify } from './utils/utils';
+import { SentryBreadcrumb } from './index';
 
 export class Sentry extends Common {
-
-
     constructor() {
         super();
     }
 
-    /**
-     * init
-     */
     public static init(dsn: string) {
-
+        this._init(dsn);
         try {
-            io.sentry.Sentry.init(dsn, new io.sentry.android.AndroidSentryClientFactory(utils.ad.getApplicationContext()));
+            io.sentry.Sentry.init(
+                dsn,
+                new io.sentry.android.AndroidSentryClientFactory(
+                    utils.ad.getApplicationContext()
+                )
+            );
         } catch (error) {
             console.log('[Sentry - Android] Exeption on init: ', error);
         }
         application.on(application.uncaughtErrorEvent, args => {
             try {
-                io.sentry.Sentry.capture(args);
+                io.sentry.Sentry.capture(args.android);
             } catch (e) {
                 console.log('[Sentry - Android] Exeption on capture: ', e);
             }
         });
+
     }
 
-    private static getErrorDetails(error: any): Error {
-
-        if (error.android) {
-            error = error.android;
-        }
-        if (error instanceof Error) {
-            return error;
-        } else if (typeof error === 'string') {
-            return new Error((error as any).originalStack);
-        }
-
-        if (error.android) {
-            error = error.android;
-        }
-        return new Error(JSON.stringify(error));
+    public static captureMessage(message: string, options) {
+        this._captureMessage(message, options);
+    }
+    public static captureException(exception: Error, options) {
+        this._captureException(exception, options);
+    }
+    public static captureBreadcrumb(breadcrumb: SentryBreadcrumb) {
+        this._captureBreadcrumb(breadcrumb);
+        let breadcrumbNative = new io.sentry.event.BreadcrumbBuilder()
+            .setCategory(breadcrumb.category)
+            .setMessage(breadcrumb.message)
+            .setData(breadcrumb.data);
+            // TODO
+            // switch() {
+            //     case '':
+            // }
+        let sentryClient = io.sentry.Sentry.getStoredClient();
+        sentryClient.getContext().recordBreadcrumb(breadcrumbNative.build());
     }
 
+    public static setContextUser(user: SentryUser): void {
+        this._setUser(user);
+        let userNative = new io.sentry.event.UserBuilder()
+            .setEmail(user.email)
+            .setUsername(user.username)
+            .build();
 
-
-    /**
-     * capture
-     */
-    public static capture(error: any) {
-        try {
-
-            let errorWithDetails = this.getErrorDetails(error);
-            let stackArray = Array.of<java.lang.StackTraceElement>();
-
-            const parsedStack: ErrorStackParser.StackFrame[] = ErrorStackParser.parse(errorWithDetails);
-            parsedStack
-                .forEach((stackFrame: ErrorStackParser.StackFrame) => {
-                    stackArray.push(
-                        new java.lang.StackTraceElement(
-                            stackFrame.source,
-                            stackFrame.functionName,
-                            stackFrame.fileName,
-                            stackFrame.lineNumber
-                        )
-                    );
-            });
-
-            let event = new io.sentry.event.EventBuilder()
-                .withMessage(`Name: ${error.name} | Message: ${error.message}`)
-                .withLevel(io.sentry.event.Event.Level.ERROR)
-                .withSentryInterface(
-                    new io.sentry.event.interfaces.StackTraceInterface(
-                        io.sentry.event.interfaces.SentryStackTraceElement.fromStackTraceElements(stackArray, null)
-                    ));
-            io.sentry.Sentry.capture(event);
-        } catch (sentryError) {
-            console.log('[Sentry - Android] ORIGINAL ERROR:', error);
-            console.log('[Sentry - Android] Exeption on capture: ', sentryError);
-        }
+        let sentryClient = io.sentry.Sentry.getStoredClient();
+        sentryClient.getContext().setUser(userNative);
     }
 
+    public static setContextTags(tags: any): void {
+        this._setTags(tags);
+        let sentryClient = io.sentry.Sentry.getStoredClient();
+        Object.keys(tags).forEach((key) => {
+            sentryClient.addTag(key, tags[key]);
+        });
+
+    }
+
+    public static setContextExtra(extra: any) {
+        this._setExtra(extra);
+        let sentryClient = io.sentry.Sentry.getStoredClient();
+        Object.keys(extra).forEach(key => {
+            sentryClient.addExtra(key, extra[key]);
+        });
+    }
+    public static clearContext() {
+        this._clearContext();
+        let sentryClient = io.sentry.Sentry.getStoredClient();
+        sentryClient.clearContext();
+    }
     public static onBeforeSend(callback) {
         let sentryClient = io.sentry.Sentry.getStoredClient();
         let shouldSend = new io.sentry.event.helper.ShouldSendEventCallback({
-            shouldSend: (event) => {
+            shouldSend: event => {
                 console.log('vou enviar no android');
                 return callback(event);
                 // return true; // true === send event, false don't send the event
@@ -100,4 +97,3 @@ export class Sentry extends Common {
         sentryClient.addShouldSendEventCallback(shouldSend);
     }
 }
-

@@ -34,22 +34,53 @@ NgModule({
 
 ## API
 
-### Init Raven
+### Init Sentry
 
-`Sentry.init(dsn: string);`
+`Sentry.init(dsn: string, options: SentryOptions)`
 
-### Capture exeption
+### Capture Exception
 
-`Sentry.capture(error: any);`
+`Sentry.captureException(exeption: Error, options: SentryOptions)`
 
 Example:
-```
+```typescript
 try {
-    throw 'try catch exeption example'
+    throw 'try catch Exception example'
 } catch(error) {
-    Sentry.capture(error);
+    Sentry.captureException(error, {});
 }
 ```
+
+### Capture Message
+
+`Sentry.captureMessage(message: string, options: SentryOptions)`
+
+### Capture BreadCrumb
+
+`Sentry.captureBreadcrumb(breadcrumb:SentryBreadcrumb)`
+
+### Set Current user
+
+`Sentry.setContextUser(user: SentryUser)`
+
+### Context Tags
+
+`Sentry.setContextTags(tags: any)`
+
+### Context Extra
+
+`Sentry.setContextExtra(extra: any)`
+
+### Clear context
+
+`Sentry.clearContext()``
+
+
+### Next features:
+
+* set device props from device(missing orientation/battery)
+* IOs native breadcrumbs
+* callback for events
 
 ### Changelog:
 
