@@ -59,6 +59,7 @@ export class AppComponent implements OnInit {
         const breadcrumb: SentryBreadcrumb = {
             message: 'bazinga, you got a breadcrumb message',
             category: 'breadcrumb category',
+            level: SentrySeverity.Info,
             data: {
                 custom: 'value'
             }

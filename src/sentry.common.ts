@@ -8,8 +8,10 @@ import * as http from 'tns-core-modules/http';
 import * as platform from 'tns-core-modules/platform';
 import { stringify } from './utils/utils';
 
-// import * as orientation from 'nativescript-orientation';
+import * as orientation from 'nativescript-orientation';
 import * as appversion from 'nativescript-appversion';
+require('nativescript-globalevents');
+
 
 export class Common extends Observable {
     constructor() {
@@ -46,28 +48,22 @@ export class Common extends Observable {
                 })
                 .then((res) => {
                     if (res.statusCode !== 200) {
-                        if (options.onFailure) {
-                            options.onFailure();
-                        }
+                        options.onFailure && options.onFailure();
                     } else {
-                        if (options.onSuccess) {
-                             options.onSuccess();
-                        }
+                        options.onSuccess && options.onSuccess();
                     }
                     }, (e) => {
-                        console.log('error');
-                        console.log(e);
-                        if (options.onFailure) {
-                             options.onFailure();
-                        }
+                        console.log('[Sentry: error on sending data to the server]', e);
+                        options.onFailure && options.onFailure();
                     });
             })
             .setDataCallback((data) => {
                 data.contexts = {
                     device: {
+                        name: platform.device.model,
                         family: platform.device.manufacturer,
                         model: platform.device.model,
-                        // orientation: DeviceOrientation[orientation.getOrientation()],
+                        orientation: DeviceOrientation[orientation.getOrientation()],
                         // battery_level: this.batteryPercent
                     },
                     os: {
@@ -104,6 +100,10 @@ export class Common extends Observable {
         Raven.captureException(exception, options);
     }
     protected static _captureBreadcrumb(breadcrumb) {
+        // this will not work because we dont actually have the level so this need thinkering
+        Object.assign({}, breadcrumb, {
+            level: SentrySeverity[breadcrumb.level]
+        });
         Raven.captureBreadcrumb(breadcrumb);
     }
 }
