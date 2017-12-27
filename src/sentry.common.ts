@@ -32,58 +32,66 @@ export class Common extends Observable {
         let aux3 = aux2[1].split('@');
 
         let ravenDsn =  'https://' + aux2[0] + '@' + aux3[1];
-        Raven.config(ravenDsn)
-            .setTransport((options) => {
-                console.log('sending');
-                http.request({
-                    url: options.url + '?' + this.urlencode(options.auth),
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Origin': 'nativescript://'
-                    },
-                    content: JSON.stringify(options.data)
-                })
-                .then((res) => {
-                    if (res.statusCode !== 200) {
-                        if (options.onFailure) {
+        Raven.config(ravenDsn, {
+            autoBreadcrumbs: {
+                'xhr': false,      // XMLHttpRequest
+                'console': true,  // console logging
+                'dom': false,       // DOM interactions, i.e. clicks/typing
+                'location': false,  // url changes, including pushState/popState
+                'sentry': true     // sentry events
+            }
+        })
+        .setTransport((options) => {
+            console.log('sending');
+            http.request({
+                url: options.url + '?' + this.urlencode(options.auth),
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Origin': 'nativescript://'
+                },
+                content: JSON.stringify(options.data)
+            })
+            .then((res) => {
+                if (res.statusCode !== 200) {
+                    if (options.onFailure) {
+                        options.onFailure();
+                    }
+                } else {
+                    if (options.onSuccess) {
+                            options.onSuccess();
+                    }
+                }
+                }, (e) => {
+                    console.log('error');
+                    console.log(e);
+                    if (options.onFailure) {
                             options.onFailure();
-                        }
-                    } else {
-                        if (options.onSuccess) {
-                             options.onSuccess();
-                        }
                     }
-                    }, (e) => {
-                        console.log('error');
-                        console.log(e);
-                        if (options.onFailure) {
-                             options.onFailure();
-                        }
-                    });
-            })
-            .setDataCallback((data) => {
-                data.contexts = {
-                    device: {
-                        family: platform.device.manufacturer,
-                        model: platform.device.model,
-                        // orientation: DeviceOrientation[orientation.getOrientation()],
-                        // battery_level: this.batteryPercent
-                    },
-                    os: {
-                        name: platform.device.os,
-                        version: platform.device.osVersion
-                    },
-                    runtime: {
-                        name: 'nativescript',
-                        // version: global.__runtimeVersion
-                    }
-                };
+                });
+        })
+        .setDataCallback((data) => {
+            data.contexts = {
+                device: {
+                    family: platform.device.manufacturer,
+                    model: platform.device.model,
+                    // orientation: DeviceOrientation[orientation.getOrientation()],
+                    // battery_level: this.batteryPercent
+                },
+                os: {
+                    name: platform.device.os,
+                    version: platform.device.osVersion
+                },
+                runtime: {
+                    name: 'nativescript',
+                    // version: global.__runtimeVersion
+                }
+            };
 
-                return data;
-            })
-            .setRelease(appversion.getVersionNameSync())
-            .install();
+            return data;
+        })
+        .setRelease(appversion.getVersionNameSync())
+        .install();
     }
     protected static _setUser(user: SentryUser) {
         Raven.setUserContext(user);
