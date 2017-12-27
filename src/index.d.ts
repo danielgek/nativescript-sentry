@@ -31,22 +31,15 @@ export enum SentrySeverity {
     Debug = 'debug',
     Critical = 'critical'
 }
-// test this shit
-// type SentrySeverity = keyof typeof SentrySeverityEnum;
 
 export interface SentryBreadcrumb {
     message?: string;
     category?: string;
-    level?: SentrySeverity;
+    // level?: SentrySeverity;
     data?: any;
 }
-
-export interface SentryInitOptions {
-    // options about verbosity
-}
-
 export interface SentryOptions {
-    level?: SentrySeverity;
+    // level?: SentrySeverity;
     environment?: string;
     release?: string;
     tags?: {
