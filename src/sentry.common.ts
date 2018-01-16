@@ -26,6 +26,8 @@ export class Common extends Observable {
     }
 
     protected static _init(dsn: string, config?: any) {
+        // Disable document usage
+        // (<any>Raven)._hasDocument = false;
         // native use private and plublic dsn while the raven js olnly uses public
         let aux = dsn.split('//');
         let aux2 = aux[1].split(':');
@@ -35,7 +37,7 @@ export class Common extends Observable {
         Raven.config(ravenDsn, {
             autoBreadcrumbs: {
                 'xhr': false,      // XMLHttpRequest
-                'console': true,  // console logging
+                'console': false,  // console logging
                 'dom': false,       // DOM interactions, i.e. clicks/typing
                 'location': false,  // url changes, including pushState/popState
                 'sentry': true     // sentry events

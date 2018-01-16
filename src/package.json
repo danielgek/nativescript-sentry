@@ -1,6 +1,6 @@
 {
   "name": "nativescript-sentry",
-  "version": "1.5.0",
+  "version": "1.5.3",
   "description": "Sentry.io NativeScript plugin.",
   "main": "sentry",
   "typings": "index.d.ts",
