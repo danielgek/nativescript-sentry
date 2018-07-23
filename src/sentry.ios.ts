@@ -8,13 +8,16 @@ import { Common } from './sentry.common';
 
 export class Sentry extends Common {
   public static init(dsn: string) {
-    this._init(dsn);
+    // this._init(dsn);
+
     try {
       SentryClient.sharedClient = SentryClient.alloc().initWithDsnDidFailWithError(dsn);
       application.ios.delegate = SentryAppDelegate;
     } catch (error) {
       // not good
     }
+
+    // setup uncaught error event
     application.on(application.uncaughtErrorEvent, args => {
       try {
         SentryJavaScriptBridgeHelper.parseJavaScriptStacktrace(args.ios);
@@ -25,11 +28,15 @@ export class Sentry extends Common {
   }
 
   public static captureMessage(message: string, options?: SentryOptions) {
-    // this._captureMessage(message, options);
+    const event = SentryEvent.alloc();
+    // event.level = options.level;
+    event.message = message;
+    SentryClient.sharedClient.sendEventWithCompletionHandler(event, () => {
+      // nothing here
+    });
   }
 
   public static captureException(exception: Error, options?: SentryOptions) {
-    // this._captureException(exception, options);
     const msg = {
       name: exception.name,
       message: exception.message,
@@ -45,17 +52,20 @@ export class Sentry extends Common {
     // event.extra = options.extra;
 
     SentryClient.sharedClient.sendEventWithCompletionHandler(event, () => {
-      console.log('on completion handler');
+      // nothing here
     });
   }
-  public static captureBreadcrumb(breadcrumb) {
-    this._captureBreadcrumb(breadcrumb);
-    // SentryClient.sharedClient.bre
-    // TODO
+  public static captureBreadcrumb(breadcrumb: SentryBreadcrumb) {
+    // this._captureBreadcrumb(breadcrumb);
+
+    breadcrumb.message;
+    const x = breadcrumb.level;
+
+    SentryClient.sharedClient.breadcrumbs.addBreadcrumb(breadcrumb);
   }
 
   public static setContextUser(user: SentryUser): void {
-    this._setUser(user);
+    // this._setUser(user);
     const userNative = SentryUser.alloc().init();
     userNative.email = user.email;
     userNative.username = user.username;
@@ -64,16 +74,16 @@ export class Sentry extends Common {
   }
 
   public static setContextTags(tags: any) {
-    this._setTags(tags);
+    // this._setTags(tags);
     SentryClient.sharedClient.tags = tags;
   }
   public static setContextExtra(extra: any) {
-    this._setExtra(extra);
+    // this._setExtra(extra);
     SentryClient.sharedClient.extra = extra;
   }
 
   public static clearContext() {
-    this._clearContext();
+    // this._clearContext();
     SentryClient.sharedClient.clearContext();
   }
 

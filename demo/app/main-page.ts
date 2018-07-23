@@ -21,3 +21,7 @@ export function onTapTry(eventData) {
     Sentry.captureException(error, {});
   }
 }
+
+export function message() {
+  Sentry.captureMessage('testing')
+}

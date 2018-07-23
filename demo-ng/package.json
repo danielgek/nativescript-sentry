@@ -4,13 +4,7 @@
   "readme": "NativeScript Application",
   "repository": "<fill-your-repository-here>",
   "nativescript": {
-    "id": "org.nativescript.demong",
-    "tns-ios": {
-      "version": "3.3.0"
-    },
-    "tns-android": {
-      "version": "3.3.0"
-    }
+    "id": "org.nativescript.demong"
   },
   "dependencies": {
     "@angular/animations": "~4.4.6",
@@ -22,11 +16,11 @@
     "@angular/platform-browser": "~4.4.6",
     "@angular/router": "~4.4.6",
     "nativescript-angular": "~4.4.1",
-    "nativescript-sentry": "../src",
+    "nativescript-sentry": "file:../src",
     "nativescript-theme-core": "~1.0.4",
     "reflect-metadata": "~0.1.10",
     "rxjs": "~5.5.2",
-    "tns-core-modules": "~3.3.0",
+    "tns-core-modules": "~4.1.0",
     "zone.js": "~0.8.18"
   },
   "devDependencies": {
@@ -34,7 +28,7 @@
     "babel-types": "6.26.0",
     "babylon": "6.18.0",
     "lazy": "1.0.11",
-    "nativescript-dev-typescript": "~0.5.1",
-    "typescript": "~2.6.1"
+    "nativescript-dev-typescript": "~0.7.2",
+    "typescript": "~2.8.2"
   }
 }
