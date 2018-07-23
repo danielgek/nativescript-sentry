@@ -5,6 +5,6 @@
     <Label text="" height="1" backgroundColor="#ff4081" width="100%" textWrap="true" margin="10 4 10 4" />
     <Label class="h3" text="This will use the captureException method to catch an error and send to Sentry." textWrap="true" />
     <Button tap="onTapTry" class="btn btn-primary" text="Capture Exception" />
-    <Button tap="message" class="btn btn-primary" text="Capture Exception" />
+    <Button tap="message" class="btn btn-primary" text="Capture Message" />
   </StackLayout>
 </Page>
