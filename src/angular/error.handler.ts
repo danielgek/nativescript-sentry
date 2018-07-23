@@ -1,5 +1,5 @@
 import { ErrorHandler } from '@angular/core';
-import { Sentry } from '../index';
+import { Sentry } from '../';
 
 export class SentryErrorHandler extends ErrorHandler {
   constructor() {
@@ -7,8 +7,6 @@ export class SentryErrorHandler extends ErrorHandler {
   }
 
   handleError(err): void {
-    // super.handleError(err);
-    console.log('passei no handler de angular');
     try {
       Sentry.captureException(err, null);
     } catch (e) {

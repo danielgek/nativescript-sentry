@@ -1,6 +1,4 @@
-import { Common } from './sentry.common';
-
-export declare class Sentry extends Common {
+export declare class Sentry {
   static init(dsn: string, options?: SentryOptions): void;
   static setContextUser(user: SentryUser): void;
   static setContextTags(tags: any): void;

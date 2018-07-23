@@ -4,12 +4,9 @@
 import * as application from 'tns-core-modules/application/application';
 import { SentryOptions, SentryUser } from './index';
 import { SentryAppDelegate } from './sentry.appdelegate';
-import { Common } from './sentry.common';
 
-export class Sentry extends Common {
+export class Sentry {
   public static init(dsn: string) {
-    // this._init(dsn);
-
     try {
       SentryClient.sharedClient = SentryClient.alloc().initWithDsnDidFailWithError(dsn);
       application.ios.delegate = SentryAppDelegate;
@@ -21,7 +18,7 @@ export class Sentry extends Common {
     application.on(application.uncaughtErrorEvent, args => {
       try {
         SentryJavaScriptBridgeHelper.parseJavaScriptStacktrace(args.ios);
-      } catch (e) {
+      } catch (error) {
         // not good
       }
     });
@@ -56,8 +53,6 @@ export class Sentry extends Common {
     });
   }
   public static captureBreadcrumb(breadcrumb: SentryBreadcrumb) {
-    // this._captureBreadcrumb(breadcrumb);
-
     breadcrumb.message;
     const x = breadcrumb.level;
 
@@ -65,25 +60,20 @@ export class Sentry extends Common {
   }
 
   public static setContextUser(user: SentryUser): void {
-    // this._setUser(user);
     const userNative = SentryUser.alloc().init();
     userNative.email = user.email;
     userNative.username = user.username;
-
     SentryClient.sharedClient.user = userNative;
   }
 
   public static setContextTags(tags: any) {
-    // this._setTags(tags);
     SentryClient.sharedClient.tags = tags;
   }
   public static setContextExtra(extra: any) {
-    // this._setExtra(extra);
     SentryClient.sharedClient.extra = extra;
   }
 
   public static clearContext() {
-    // this._clearContext();
     SentryClient.sharedClient.clearContext();
   }
 

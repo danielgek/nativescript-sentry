@@ -9,6 +9,7 @@ export class SentryAppDelegate extends UIResponder implements UIApplicationDeleg
       SentryClient.sharedClient.startCrashHandlerWithError();
     } else {
       // not good to be here
+      return false;
     }
     return true;
   }

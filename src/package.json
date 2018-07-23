@@ -80,10 +80,6 @@
     "semver": "^5.5.0",
     "zone.js": "0.8.17"
   },
-  "dependencies": {
-    "nativescript-orientation": "^2.2.0",
-    "raven-js": "^3.26.4"
-  },
   "lint-staged": {
     "*.ts": [
       "prettier --write",

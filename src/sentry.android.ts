@@ -4,15 +4,9 @@
 import * as application from 'tns-core-modules/application/application';
 import * as utils from 'tns-core-modules/utils/utils';
 import { SentryBreadcrumb, SentryOptions } from './index';
-import { Common } from './sentry.common';
 
-export class Sentry extends Common {
-  constructor() {
-    super();
-  }
-
+export class Sentry {
   public static init(dsn: string) {
-    // this._init(dsn);
     try {
       io.sentry.Sentry.init(dsn, new io.sentry.android.AndroidSentryClientFactory(utils.ad.getApplicationContext()));
     } catch (error) {
@@ -51,7 +45,6 @@ export class Sentry extends Common {
   }
 
   public static captureBreadcrumb(breadcrumb: SentryBreadcrumb) {
-    // this._captureBreadcrumb(breadcrumb);
     const breadcrumbNative = new io.sentry.event.BreadcrumbBuilder()
       .setCategory(breadcrumb.category)
       .setMessage(breadcrumb.message)
@@ -65,7 +58,6 @@ export class Sentry extends Common {
   }
 
   public static setContextUser(user: SentryUser): void {
-    // this._setUser(user);
     const userNative = new io.sentry.event.UserBuilder()
       .setEmail(user.email)
       .setUsername(user.username)
@@ -76,7 +68,6 @@ export class Sentry extends Common {
   }
 
   public static setContextTags(tags: any): void {
-    // this._setTags(tags);
     const sentryClient = io.sentry.Sentry.getStoredClient();
     Object.keys(tags).forEach(key => {
       sentryClient.addTag(key, tags[key]);
@@ -84,7 +75,6 @@ export class Sentry extends Common {
   }
 
   public static setContextExtra(extra: any) {
-    // this._setExtra(extra);
     const sentryClient = io.sentry.Sentry.getStoredClient();
     Object.keys(extra).forEach(key => {
       sentryClient.addExtra(key, extra[key]);
@@ -92,7 +82,6 @@ export class Sentry extends Common {
   }
 
   public static clearContext() {
-    // this._clearContext();
     const sentryClient = io.sentry.Sentry.getStoredClient();
     sentryClient.clearContext();
   }

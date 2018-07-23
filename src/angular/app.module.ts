@@ -7,7 +7,7 @@ import {
   NO_ERRORS_SCHEMA,
   Optional
 } from '@angular/core';
-import { Sentry } from '../index';
+import { Sentry } from '../';
 import { SentryErrorHandler } from './error.handler';
 
 export const SENTRY_CONFIG = new InjectionToken<SentryConfig>('SENTRY_CONFIG');
