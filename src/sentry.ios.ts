@@ -1,5 +1,5 @@
 /// <reference path="./node_modules/tns-platform-declarations/ios.d.ts" />
-/// <reference path="./sentry-api.ios.d.ts" />
+
 import { Common } from './sentry.common';
 import * as application from 'tns-core-modules/application';
 import { SentryAppDelegate } from './sentry.appdelegate';
@@ -14,31 +14,53 @@ export class Sentry extends Common {
             SentryClient.sharedClient = SentryClient.alloc().initWithDsnDidFailWithError(
                 dsn
             );
+            SentryClient.sharedClient.startCrashHandlerWithError();
             application.ios.delegate = SentryAppDelegate;
+            console.log('yup')
         } catch (error) {
             console.log('[Sentry - iOS] Exeption on init: ', error);
         }
         application.on(application.uncaughtErrorEvent, args => {
             try {
+                console.log('here-------------------------------------')
                 // TODO: test this shit
-                SentryJavaScriptBridgeHelper.parseJavaScriptStacktrace(args.ios);
+                let parsed = SentryJavaScriptBridgeHelper.parseJavaScriptStacktrace(args.ios);
+                console.log(parsed);
                 // SentryClient.sharedClient.
             } catch (e) {
                 console.log('[Sentry - iOS] Exeption on uncaughtErrorEvent: ', e);
             }
         });
+
+    }
+
+    public static testNativeCrash() {
+        SentryClient.sharedClient.crash();
     }
 
     public static captureMessage(message: string, options) {
         this._captureMessage(message, options);
     }
     public static captureException(exception: Error, options) {
+        console.log('captureException')
         this._captureException(exception, options);
     }
     public static captureBreadcrumb(breadcrumb) {
         this._captureBreadcrumb(breadcrumb);
-        // SentryClient.sharedClient.bre
-        // TODO
+
+        const { category, data, message } = breadcrumb;
+
+        let nativeCrum = new SentryBreadcrumb({
+            category,
+            level: SentrySeverity.kSentrySeverityInfo 
+        });
+        nativeCrum.data = data;
+        nativeCrum.message = message;
+        
+        SentryClient.sharedClient.breadcrumbs.addBreadcrumb(
+            nativeCrum   
+        );
+        // NEEDS to be tested 
     }
 
     public static setContextUser(user: SentryUser): void {
@@ -47,7 +69,7 @@ export class Sentry extends Common {
         userNative.email = user.email;
         userNative.username = user.username;
 
-        SentryClient.sharedClient.user = userNative;
+        SentryClient.sharedClient.user = userNative; 
     }
 
     public static setContextTags(tags: any) {
@@ -67,6 +89,7 @@ export class Sentry extends Common {
     public static onBeforeSend(callback) {
         SentryClient.sharedClient.beforeSerializeEvent = event => {
             console.log('vou enviar no ios');
+            // TODO: add before sent mecanism to the lib
             callback(event);
         };
     }

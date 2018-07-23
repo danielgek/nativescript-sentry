@@ -7,5 +7,8 @@ export class HelloWorldModel extends Observable {
 
   constructor() {
     super();
+
+    this.sentry = new Sentry();
+    this.message = this.sentry.message;
   }
 }

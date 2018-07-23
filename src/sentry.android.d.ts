@@ -5,6 +5,8 @@ import { SentryBreadcrumb } from './index';
 export declare class Sentry extends Common {
     constructor();
     static init(dsn: string): void;
+    static parse(stackString: any): any[];
+    static testNativeCrash(): void;
     static captureMessage(message: string, options: any): void;
     static captureException(exception: Error, options: any): void;
     static captureBreadcrumb(breadcrumb: SentryBreadcrumb): void;

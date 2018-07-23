@@ -20,12 +20,7 @@
         "noFallthroughCasesInSwitch": true
     },
     "exclude": [
-        "node_modules",
-        "platforms"
+        "node_modules"
     ],
-    "compileOnSave": false,
-    "angularCompilerOptions": {
-        "strictMetadataEmit": true,
-        "skipTemplateCodegen": true
-    }
+    "compileOnSave": false
 }

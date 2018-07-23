@@ -1,116 +1,40 @@
-# Sentry.io for nativescript
+# Your Plugin Name
 
-This plugin uses sentry-android and sentry-cocoa to catch native errors/stack traces and send them to a sentry server.
+Add your plugin badges here. See [nativescript-urlhandler](https://github.com/hypery2k/nativescript-urlhandler) for example.
 
-**NOTE:** If you have a **native exeption** and the app exits the plugin will save the log and send it in the **next app startup**, this is how the native plugins are implemented and it is expected behavior
+Then describe what's the purpose of your plugin. 
+
+In case you develop UI plugin, this is where you can add some screenshots.
+
+## (Optional) Prerequisites / Requirements
+
+Describe the prerequisites that the user need to have installed before using your plugin. See [nativescript-firebase plugin](https://github.com/eddyverbruggen/nativescript-plugin-firebase) for example.
 
 ## Installation
 
+Describe your plugin installation steps. Ideally it would be something like:
+
 ```javascript
-tns plugin add nativescript-sentry
+tns plugin add <your-plugin-name>
 ```
 
-## Usage
+## Usage 
 
-### Without Angular
-```typescript
-import { Sentry } from 'nativescript-sentry';
-const dsn = 'https://<key>:<secret>@host/<project>';
-Sentry.init(dsn);
-```
-### With Angular
-```typescript
-import { SentryModule } from 'nativescript-sentry/angular';
-
-NgModule({
-  ...
-  imports: [
-       SentryModule.forRoot({dsn: 'https://<key>:<secret>@host/<project>'})
-  ],
-
-```
-
-**Note:** this plugin adds a custom ErrorHandler and automatically provides it
+Describe any usage specifics for your plugin. Give examples for Android, iOS, Angular if needed. See [nativescript-drop-down](https://www.npmjs.com/package/nativescript-drop-down) for example.
+	
+	```javascript
+    Usage code snippets here
+    ```)
 
 ## API
 
-### Init Sentry
+Describe your plugin methods and properties here. See [nativescript-feedback](https://github.com/EddyVerbruggen/nativescript-feedback) for example.
+    
+| Property | Default | Description |
+| --- | --- | --- |
+| some property | property default value | property description, default values, etc.. |
+| another property | property default value | property description, default values, etc.. |
+    
+## License
 
-`Sentry.init(dsn: string, options: SentryOptions)`
-
-### Capture Exception
-
-`Sentry.captureException(exeption: Error, options: SentryOptions)`
-
-Example:
-```typescript
-try {
-    throw 'try catch Exception example'
-} catch(error) {
-    Sentry.captureException(error, {});
-}
-```
-
-### Capture Message
-
-`Sentry.captureMessage(message: string, options: SentryOptions)`
-
-### Capture BreadCrumb
-
-`Sentry.captureBreadcrumb(breadcrumb:SentryBreadcrumb)`
-
-### Set Current user
-
-`Sentry.setContextUser(user: SentryUser)`
-
-### Context Tags
-
-`Sentry.setContextTags(tags: any)`
-
-### Context Extra
-
-`Sentry.setContextExtra(extra: any)`
-
-### Clear context
-
-`Sentry.clearContext()``
-
-
-### Next features:
-
-* set device props from device(missing orientation/battery)
-* IOs native breadcrumbs
-* callback for events
-
-### Changelog:
-
-**11/12/2017 - (1.5.0):**
-
-**BREAKING CHANGES**
-* `capture()` method was deprecated in favor of `captureMessage`/`captureException`
-
-**Features**
-* Moving to an hybrid approach with both clients(web/native)
-* breadcrums
-* tags
-* user info
-* set tags and extra for each event
-
-**28-08-2017 - (1.3.0):**
-* fix Aot compilation for angular apps
-* fix typos thanks to @muratcorlu 
-
-**2-08-2017 - (1.2.0):**
-* update demos dependencies
-* update ios and android native dependencies
-* fix ios event capture
-
-**24-07-2017 - (1.1.0):**
-
-* fix stringify
-* fix angular error handler
-
-## Credits:
-
-* **@hypery2k**: for his **nativescript-fabric**(helped me a lot!)
-
+Apache License Version 2.0, January 2004

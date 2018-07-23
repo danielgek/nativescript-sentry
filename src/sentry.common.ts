@@ -27,7 +27,7 @@ export class Common extends Observable {
 
     protected static _init(dsn: string, config?: any) {
         // Disable document usage
-        // (<any>Raven)._hasDocument = false;
+        (<any>Raven)._hasDocument = false;
         // native use private and plublic dsn while the raven js olnly uses public
         let aux = dsn.split('//');
         let aux2 = aux[1].split(':');
@@ -35,16 +35,10 @@ export class Common extends Observable {
 
         let ravenDsn =  'https://' + aux2[0] + '@' + aux3[1];
         Raven.config(ravenDsn, {
-            autoBreadcrumbs: {
-                'xhr': false,      // XMLHttpRequest
-                'console': false,  // console logging
-                'dom': false,       // DOM interactions, i.e. clicks/typing
-                'location': false,  // url changes, including pushState/popState
-                'sentry': true     // sentry events
-            }
+            autoBreadcrumbs: false
         })
         .setTransport((options) => {
-            console.log('sending');
+            console.log('sending2');
             http.request({
                 url: options.url + '?' + this.urlencode(options.auth),
                 method: 'POST',
@@ -52,13 +46,13 @@ export class Common extends Observable {
                     'Content-Type': 'application/json',
                     'Origin': 'nativescript://'
                 },
-                content: JSON.stringify(options.data)
+                content: stringify(options.data)
             })
             .then((res) => {
                 if (res.statusCode !== 200) {
-                    if (options.onFailure) {
-                        options.onFailure();
-                    }
+                    // if (options.onFailure) {
+                    //     options.onFailure();
+                    // }
                 } else {
                     if (options.onSuccess) {
                             options.onSuccess();
@@ -67,9 +61,9 @@ export class Common extends Observable {
                 }, (e) => {
                     console.log('error');
                     console.log(e);
-                    if (options.onFailure) {
-                            options.onFailure();
-                    }
+                    // if (options.onFailure) {
+                    //         options.onFailure();
+                    // }
                 });
         })
         .setDataCallback((data) => {
@@ -96,7 +90,7 @@ export class Common extends Observable {
         .install();
     }
     protected static _setUser(user: SentryUser) {
-        Raven.setUserContext(user);
+        Raven.setUserContext(user as any); // TODO: 
     }
     protected static _setTags(tags: any) {
         Raven.setTagsContext(tags);

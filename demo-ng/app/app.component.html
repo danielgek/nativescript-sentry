@@ -1,7 +1,8 @@
 <ActionBar title="Testing sentry" class="action-bar">
 </ActionBar>
 <StackLayout >
-    <Button (tap)="onTapNative()" text="Main thread exeption test(native)" ></Button>
+    <Button (tap)="onTapNative()" text="Native test crash" ></Button>
+    <Button (tap)="onTapMainThread()" text="Main thread exeption test" ></Button>
     <Button (tap)="onTapTryError()" text="Try trow with Error test" ></Button>
     <Button (tap)="onTapTry()" text="Try trow without Error test"></Button>
     <Button (tap)="onTapMessage()" text="Capture Message"></Button>

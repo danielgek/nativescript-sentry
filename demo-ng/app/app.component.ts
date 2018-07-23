@@ -27,7 +27,7 @@ export class AppComponent implements OnInit {
             tag1: 'value1',
             tag2: 'value2'
         });
-        Sentry.setContextExtra({
+         Sentry.setContextExtra({
             extra1: 'valuextra1',
             extra2: 'valuextra2'
         });
@@ -48,7 +48,11 @@ export class AppComponent implements OnInit {
         }
     }
 
-    onTapNative(eventData) {
+    onTapNative() {
+        Sentry.testNativeCrash();
+    }
+
+    onTapMainThread() {
         throw 'Test Sentry on Main thread';
     }
 
@@ -64,6 +68,8 @@ export class AppComponent implements OnInit {
             }
         };
         Sentry.captureBreadcrumb(breadcrumb);
+
+        throw new Error('Test captureBreadcrumb');
     }
 
     onTapCaptureWithExtras() {

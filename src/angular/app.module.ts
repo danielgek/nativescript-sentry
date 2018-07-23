@@ -18,14 +18,6 @@ export const SENTRY_CONFIG = new InjectionToken<SentryConfig>('SENTRY_CONFIG');
 
 export class SentryConfig { dsn = ''; }
 
-@Injectable()
-export class SentryService {
-    dsn: string;
-    constructor( @Optional() config: SentryConfig) {
-        if (config) { this.dsn = config.dsn; }
-    }
-}
-
 @NgModule({
     declarations: [],
     providers: [ SentryConfig ],

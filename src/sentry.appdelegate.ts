@@ -6,8 +6,13 @@ export class SentryAppDelegate extends UIResponder
         application: UIApplication,
         launchOptions: NSDictionary<any, any>
     ): boolean {
+        console.log('bam')
         if (SentryClient.sharedClient) {
-            SentryClient.sharedClient.startCrashHandlerWithError();
+            if(!SentryClient.sharedClient.startCrashHandlerWithError()) {
+                console.error(
+                    '[Sentry - iOS] SentryClient.startCrashHandlerWithError crashed!'
+                );
+            }
         } else {
             console.error(
                 '[Sentry - iOS] No SentryClient.shared instance found!'

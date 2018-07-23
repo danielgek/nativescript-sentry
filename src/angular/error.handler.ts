@@ -3,9 +3,7 @@ import { Sentry } from '../';
 import { SentryConfig } from "./";
 
 export class SentryErrorHandler extends ErrorHandler {
-    constructor() {
-        super(false);
-    }
+    
 
     handleError(err): void {
         // super.handleError(err);

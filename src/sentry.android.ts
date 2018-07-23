@@ -25,12 +25,65 @@ export class Sentry extends Common {
         }
         application.on(application.uncaughtErrorEvent, args => {
             try {
-                io.sentry.Sentry.capture(args.android);
+                
+                let event = new io.sentry.event.EventBuilder()
+                    .withLevel(io.sentry.event.Event.Level.FATAL)
+                    .withMessage(stringify(args.android))
+                    .withSentryInterface(
+                        new io.sentry.event.interfaces.StackTraceInterface(
+                            io.sentry.event.interfaces.SentryStackTraceElement.fromStackTraceElements(this.parse(args.android.stackTrace), null)
+                        )
+                    );
+                let sentryClient = io.sentry.Sentry.getStoredClient();
+                sentryClient.sendEvent(event);
             } catch (e) {
                 console.log('[Sentry - Android] Exeption on capture: ', e);
             }
         });
 
+    }
+    public static parse(stackString) {
+        var chrome = /^\s*at (?:(?:(?:Anonymous function)?|((?:\[object object\])?\S+(?: \[as \S+\])?)) )?\(?((?:file|http|https):.*?):(\d+)(?::(\d+))?\)?\s*$/i,
+            gecko = /^(?:\s*([^@]*)(?:\((.*?)\))?@)?(\S.*?):(\d+)(?::(\d+))?\s*$/i,
+            node  = /^\s*at (?:((?:\[object object\])?\S+(?: \[as \S+\])?) )?\(?(.*?):(\d+)(?::(\d+))?\)?\s*$/i,
+            lines = stackString.split('\n'),
+            stack = [],
+            parts,
+            element;
+    
+        for (var i = 0, j = lines.length; i < j; ++i) {
+            if ((parts = gecko.exec(lines[i]))) {
+                element = {
+                    'file': parts[3],
+                    'methodName': parts[1] || 'UNKNOWN_FUNCTION',
+                    'lineNumber': +parts[4],
+                    'column': parts[5] ? +parts[5] : null
+                };
+            } else if ((parts = chrome.exec(lines[i]))) {
+                element = {
+                    'file': parts[2],
+                    'methodName': parts[1] || 'UNKNOWN_FUNCTION',
+                    'lineNumber': +parts[3],
+                    'column': parts[4] ? +parts[4] : null
+                };
+            } else if ((parts = node.exec(lines[i]))) {
+                element = {
+                    'file': parts[2],
+                    'methodName': parts[1] || 'UNKNOWN_FUNCTION',
+                    'lineNumber': +parts[3],
+                    'column': parts[4] ? +parts[4] : null
+                };
+            } else {
+                continue;
+            }
+    
+            stack.push(element);
+        }
+        console.log(JSON.stringify(stack));
+        return stack;
+      }
+    public static testNativeCrash() {
+        throw new java.lang.Exception("You shouldn't call this!");
     }
 
     public static captureMessage(message: string, options) {
@@ -41,6 +94,7 @@ export class Sentry extends Common {
     }
     public static captureBreadcrumb(breadcrumb: SentryBreadcrumb) {
         this._captureBreadcrumb(breadcrumb);
+        
         let breadcrumbNative = new io.sentry.event.BreadcrumbBuilder()
             .setCategory(breadcrumb.category)
             .setMessage(breadcrumb.message)
@@ -49,6 +103,7 @@ export class Sentry extends Common {
             // switch() {
             //     case '':
             // }
+            
         let sentryClient = io.sentry.Sentry.getStoredClient();
         sentryClient.getContext().recordBreadcrumb(breadcrumbNative.build());
     }

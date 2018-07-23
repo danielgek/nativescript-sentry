@@ -1,5 +1,3 @@
-
-
 import { Common } from './sentry.common';
 
 export declare class Sentry extends Common {
@@ -11,6 +9,7 @@ export declare class Sentry extends Common {
     static captureMessage(message: string, options: SentryOptions): void;
     static captureException(exeption: Error, options: SentryOptions): void;
     static captureBreadcrumb(breadcrumb: SentryBreadcrumb): void;
+    static testNativeCrash(): void;
     // static capture(error: any): void; // Deprecated !!
     // static setEventSentSuccessfully(callback: Function): void; // TODO 
     // static setShouldSendCallback(callback: Function): void; // TODO 
