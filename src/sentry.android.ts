@@ -3,7 +3,7 @@
 
 import * as application from 'tns-core-modules/application/application';
 import * as utils from 'tns-core-modules/utils/utils';
-import { SentryBreadcrumb, SentryOptions } from './index';
+import { SentryBreadcrumb } from './index';
 
 export class Sentry {
   public static init(dsn: string) {
@@ -26,27 +26,16 @@ export class Sentry {
     sentryClient.sendMessage(message);
   }
 
-  public static captureException(exception: Error, options?: SentryOptions) {
-    // build out an object with stack, message and name from the Error
-    const msg = {
-      name: exception.name,
-      message: exception.message,
-      stack: exception.stack
-    };
-    const data = JSON.stringify(msg);
-
-    const eventBuilder = new io.sentry.event.EventBuilder()
-      .withMessage(data)
-      .withRelease(options.release)
-      .withEnvironment(options.environment)
-      .withLevel(io.sentry.event.Event.Level.ERROR);
-
-    io.sentry.Sentry.capture(eventBuilder);
+  public static captureException(exception: Error) {
+    const sentryClient = io.sentry.Sentry.getStoredClient();
+    const x = new java.lang.Throwable(exception.stack);
+    sentryClient.sendException(x);
   }
 
   public static captureBreadcrumb(breadcrumb: SentryBreadcrumb) {
     const breadcrumbNative = new io.sentry.event.BreadcrumbBuilder()
       .setCategory(breadcrumb.category)
+      // .setLevel(breadcrumb.level) // add the level enum to map correctly
       .setMessage(breadcrumb.message)
       .setData(breadcrumb.data);
     // TODO

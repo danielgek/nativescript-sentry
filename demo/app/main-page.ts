@@ -1,4 +1,4 @@
-import { Sentry } from 'nativescript-sentry';
+import { Sentry, SentryBreadcrumb } from 'nativescript-sentry';
 import { EventData } from 'tns-core-modules/data/observable';
 import { Page } from 'tns-core-modules/ui/page';
 import { HelloWorldModel } from './main-view-model';
@@ -23,5 +23,16 @@ export function onTapTry(eventData) {
 }
 
 export function message() {
-  Sentry.captureMessage('testing')
+  Sentry.captureMessage('testing');
+}
+
+export function onTapBreadcrumb() {
+  const breadcrumb: SentryBreadcrumb = {
+    message: 'bazinga, you got a breadcrumb message',
+    category: 'breadcrumb category',
+    data: {
+      custom: 'value'
+    }
+  };
+  Sentry.captureBreadcrumb(breadcrumb);
 }

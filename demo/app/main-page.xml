@@ -1,4 +1,8 @@
 <Page xmlns="http://schemas.nativescript.org/tns.xsd" loaded="pageLoaded" class="page">
+  <Page.actionBar>
+    <ActionBar title="NativeScript Sentry">
+    </ActionBar>
+  </Page.actionBar>
   <StackLayout class="p-20">
     <Label class="h3" text="This will crash the app and throw the application's uncaughtErrorEvent." textWrap="true" />
     <Button tap="onTapMain" backgroundColor="red" color="white" text="Uncaught Error" />
@@ -6,5 +10,6 @@
     <Label class="h3" text="This will use the captureException method to catch an error and send to Sentry." textWrap="true" />
     <Button tap="onTapTry" class="btn btn-primary" text="Capture Exception" />
     <Button tap="message" class="btn btn-primary" text="Capture Message" />
+    <Button tap="onTapBreadcrumb" class="btn btn-primary" text="Capture Breadcrumb" />
   </StackLayout>
 </Page>
