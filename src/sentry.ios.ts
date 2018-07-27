@@ -1,62 +1,57 @@
 /// <reference path="./node_modules/tns-platform-declarations/ios.d.ts" />
 /// <reference path="./typings/sentry-api.ios.d.ts" />
 
-import * as application from 'tns-core-modules/application/application';
-import { SentryOptions, SentryUser } from './index';
-import { SentryAppDelegate } from './sentry.appdelegate';
+import { SentryUser, TNS_SentryBreadCrumb, TNS_SentryLevel } from './sentry.common';
 
 export class Sentry {
   public static init(dsn: string) {
     try {
       SentryClient.sharedClient = SentryClient.alloc().initWithDsnDidFailWithError(dsn);
-      application.ios.delegate = SentryAppDelegate;
+      SentryClient.sharedClient.startCrashHandlerWithError();
     } catch (error) {
       // not good
     }
+  }
 
-    // setup uncaught error event
-    application.on(application.uncaughtErrorEvent, args => {
+  public static captureMessage(message: string, level?: TNS_SentryLevel) {
+    const event = SentryEvent.alloc();
+    event.message = message;
+    const sentryLevel = this._convertSentryLevel(level) as SentrySeverity;
+    console.log('Sentry level returned', sentryLevel);
+    event.level = sentryLevel;
+    SentryClient.sharedClient.sendEventWithCompletionHandler(event, () => {
+      // nothing here
+    });
+  }
+
+  public static captureException(exception: Error) {
+    SentryClient.sharedClient.snapshotStacktrace(() => {
+      // BRAD - I don't think we need to do the stack trace here bc it's the iOS/Apple stack and it's not helpful for debugging.
+      // The actual `message` for the event is the stack trace we're throwing from the JS side which is more than enough to debug exceptions.
       try {
-        SentryJavaScriptBridgeHelper.parseJavaScriptStacktrace(args.ios);
+        const event = SentryEvent.alloc().initWithLevel(SentrySeverity.kSentrySeverityError);
+        event.message = exception.stack ? exception.stack : exception.message;
+
+        SentryClient.sharedClient.appendStacktraceToEvent(event);
+        // event.environment = options.environment;
+        // event.releaseName = options.release;
+        // need to parse this out
+        // event.extra = options.extra;
+        SentryClient.sharedClient.sendEventWithCompletionHandler(event, () => {
+          // nothing here
+          console.log('send event completion handler');
+        });
       } catch (error) {
-        // not good
+        console.log('sentry error brad', error);
       }
     });
   }
-
-  public static captureMessage(message: string, options?: SentryOptions) {
-    const event = SentryEvent.alloc();
-    // event.level = options.level;
-    event.message = message;
-    SentryClient.sharedClient.sendEventWithCompletionHandler(event, () => {
-      // nothing here
-    });
-  }
-
-  public static captureException(exception: Error, options?: SentryOptions) {
-    const msg = {
-      name: exception.name,
-      message: exception.message,
-      stack: exception.stack
-    };
-    const data = JSON.stringify(msg);
-
-    const event = SentryEvent.alloc().initWithLevel(SentrySeverity.kSentrySeverityError);
-    event.message = data;
-    event.environment = options.environment;
-    event.releaseName = options.release;
-    // need to parse this out
-    // event.extra = options.extra;
-
-    SentryClient.sharedClient.sendEventWithCompletionHandler(event, () => {
-      // nothing here
-    });
-  }
-  public static captureBreadcrumb(breadcrumb: SentryBreadcrumb) {
-    breadcrumb.message;
-    const x = breadcrumb.level;
-
-    SentryClient.sharedClient.breadcrumbs.addBreadcrumb(breadcrumb);
+  public static captureBreadcrumb(breadcrumb: TNS_SentryBreadCrumb) {
+    const sentryLevel = this._convertSentryLevel(breadcrumb.level);
+    // init the iOS SentryBreadCrumb
+    const sentryBC = new SentryBreadcrumb(null).initWithLevelCategory(sentryLevel, breadcrumb.category);
+    sentryBC.message = breadcrumb.message;
+    SentryClient.sharedClient.breadcrumbs.addBreadcrumb(sentryBC);
   }
 
   public static setContextUser(user: SentryUser): void {
@@ -81,5 +76,31 @@ export class Sentry {
     SentryClient.sharedClient.beforeSerializeEvent = event => {
       callback(event);
     };
+  }
+
+  /**
+   * Returns the ios Sentry Level for the provided TNS_SentryLevel
+   * @default - INFO
+   */
+  private static _convertSentryLevel(level: TNS_SentryLevel) {
+    if (!level) {
+      console.log('no level provided so returning INFO type');
+      return SentrySeverity.kSentrySeverityInfo;
+    }
+
+    switch (level) {
+      case TNS_SentryLevel.Info:
+        return SentrySeverity.kSentrySeverityInfo;
+      case TNS_SentryLevel.Warning:
+        return SentrySeverity.kSentrySeverityWarning;
+      case TNS_SentryLevel.Fatal:
+        return SentrySeverity.kSentrySeverityFatal;
+      case TNS_SentryLevel.Error:
+        return SentrySeverity.kSentrySeverityError;
+      case TNS_SentryLevel.Debug:
+        return SentrySeverity.kSentrySeverityDebug;
+      default:
+        return SentrySeverity.kSentrySeverityInfo;
+    }
   }
 }

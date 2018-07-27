@@ -35,7 +35,7 @@ export class SentryService {
 export class SentryModule {
   constructor(config: SentryConfig) {
     if (config && config.dsn) {
-      Sentry.init(config.dsn, null);
+      Sentry.init(config.dsn);
     } else {
       console.error('You need to provide a dsn on the forRoot method');
     }

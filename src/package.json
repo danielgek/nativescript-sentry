@@ -63,6 +63,10 @@
   "license": "Apache-2.0",
   "homepage": "https://github.com/danielgek/nativescript-sentry",
   "readmeFilename": "README.md",
+  "dependencies": {
+    "@sentry/browser": "^4.0.0-beta.11",
+    "raven-js": "^3.26.4"
+  },
   "devDependencies": {
     "@angular/core": "4.4.6",
     "@angular/compiler": "4.4.6",

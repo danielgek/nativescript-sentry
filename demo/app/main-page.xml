@@ -4,6 +4,8 @@
     </ActionBar>
   </Page.actionBar>
   <StackLayout class="p-20">
+  <Button text="Init Sentry" tap="initSentry" />
+  
     <Label class="h3" text="This will crash the app and throw the application's uncaughtErrorEvent." textWrap="true" />
     <Button tap="onTapMain" backgroundColor="red" color="white" text="Uncaught Error" />
     <Label text="" height="1" backgroundColor="#ff4081" width="100%" textWrap="true" margin="10 4 10 4" />

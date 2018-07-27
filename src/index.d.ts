@@ -1,16 +1,12 @@
 export declare class Sentry {
-  static init(dsn: string, options?: SentryOptions): void;
+  static init(dsn: string): void;
   static setContextUser(user: SentryUser): void;
   static setContextTags(tags: any): void;
   static setContextExtra(extra: any): void;
   static clearContext(): void;
-  static captureMessage(message: string, options?: SentryOptions): void;
+  static captureMessage(message: string, level?: TNS_SentryLevel): void;
   static captureException(exeption: Error, options?: SentryOptions): void;
-  static captureBreadcrumb(breadcrumb: SentryBreadcrumb): void;
-  // static capture(error: any): void; // Deprecated !!
-  // static setEventSentSuccessfully(callback: Function): void; // TODO
-  // static setShouldSendCallback(callback: Function): void; // TODO
-  // static setDataCallback(callback: Function): void; // TODO
+  static captureBreadcrumb(breadcrumb: TNS_SentryBreadCrumb): void;
 }
 
 export interface SentryUser {
@@ -19,20 +15,18 @@ export interface SentryUser {
   id?: string;
 }
 
-export enum SentrySeverity {
+export enum TNS_SentryLevel {
   Fatal = 'fatal',
   Error = 'error',
   Warning = 'warning',
   Info = 'info',
-  Debug = 'debug',
-  Critical = 'critical'
+  Debug = 'debug'
 }
 
-export interface SentryBreadcrumb {
-  message?: string;
-  category?: string;
-  // level?: SentrySeverity;
-  data?: any;
+export interface TNS_SentryBreadCrumb {
+  message: string;
+  category: string;
+  level: TNS_SentryLevel;
 }
 export interface SentryOptions {
   // level?: SentrySeverity;
