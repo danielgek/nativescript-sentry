@@ -1,21 +1,55 @@
 export declare class Sentry {
+  /**
+   * Initializes the Sentry SDK for the provided DSN key.
+   * @param dsn [string] - The client DSN key for the Sentry project.
+   */
   static init(dsn: string): void;
+
+  /**
+   * Log a message.
+   * @param message [string] - The message to log.
+   * @param level [TNS_SentryLevel] - The level to log for the message.
+   */
+  static captureMessage(message: string, options?: MessageOptions): void;
+
+  /**
+   * Log an exception.
+   * @param exeption [Error] - The exception to log.
+   */
+  static captureException(exeption: Error, options?: ExceptionOptions): void;
+
+  /**
+   * Log a breadcrumb for the current Sentry context.
+   * @param breadcrumb [TNS_SentryBreadCrumb] - The breadcrumb to capture.
+   */
+  static captureBreadcrumb(breadcrumb: BreadCrumb): void;
+
+  /**
+   * Set a user to the Sentry context.
+   * @param user [TNS_SentryUser] - The user to set with the current Sentry context.
+   */
   static setContextUser(user: SentryUser): void;
-  static setContextTags(tags: any): void;
-  static setContextExtra(extra: any): void;
+
+  /**
+   * Set an object of additional Key/value pairs which generate breakdowns charts and search filters.
+   * @param tags [object] - Object of additional Key/value pairs.
+   */
+  static setContextTags(tags: object): void;
+
+  /**
+   * Set an object of unstructured data which is stored with events for the current Sentry context.
+   * @param extra [object] - An arbitrary object of Key/value pairs.
+   */
+  static setContextExtra(extra: object): void;
+
+  /**
+   * Clears the context of the current Sentry context.
+   * The current context is created during the `init` execution.
+   */
   static clearContext(): void;
-  static captureMessage(message: string, level?: TNS_SentryLevel): void;
-  static captureException(exeption: Error, options?: SentryOptions): void;
-  static captureBreadcrumb(breadcrumb: TNS_SentryBreadCrumb): void;
 }
 
-export interface SentryUser {
-  email?: string;
-  username?: string;
-  id?: string;
-}
-
-export enum TNS_SentryLevel {
+export enum Level {
   Fatal = 'fatal',
   Error = 'error',
   Warning = 'warning',
@@ -23,17 +57,40 @@ export enum TNS_SentryLevel {
   Debug = 'debug'
 }
 
-export interface TNS_SentryBreadCrumb {
+export interface SentryUser {
+  id: string;
+  email?: string;
+  username?: string;
+}
+
+export interface BreadCrumb {
   message: string;
   category: string;
-  level: TNS_SentryLevel;
+  level: Level;
 }
-export interface SentryOptions {
-  // level?: SentrySeverity;
-  environment?: string;
-  release?: string;
-  tags?: {
-    [id: string]: string;
-  };
-  extra?: any;
+
+export interface MessageOptions {
+  level?: Level;
+
+  /**
+   * Object of additional Key/value pairs which generate breakdowns charts and search filters.
+   */
+  tags?: object;
+
+  /**
+   * Object of unstructured data which is stored with events.
+   */
+  extra?: object;
+}
+
+export interface ExceptionOptions {
+  /**
+   * Object of additional Key/value pairs which generate breakdowns charts and search filters.
+   */
+  tags?: object;
+
+  /**
+   * Object of unstructured data which is stored with events.
+   */
+  extra?: object;
 }
