@@ -7,6 +7,7 @@ export class Sentry {
   public static init(dsn: string) {
     SentryClient.sharedClient = SentryClient.alloc().initWithDsnDidFailWithError(dsn);
     SentryClient.sharedClient.startCrashHandlerWithError();
+    SentryClient.sharedClient.enableAutomaticBreadcrumbTracking();
   }
 
   public static captureMessage(message: string, options?: MessageOptions) {
@@ -39,13 +40,12 @@ export class Sentry {
     event.message = exception.stack ? exception.stack : exception.message;
     SentryClient.sharedClient.sendEventWithCompletionHandler(event, () => {
       // nothing here
-      console.log('send event completion handler');
     });
   }
 
   public static captureBreadcrumb(breadcrumb: BreadCrumb) {
     // create the iOS SentryBreadCrumb
-    const sentryBC = new SentryBreadcrumb(null).initWithLevelCategory(
+    const sentryBC = SentryBreadcrumb.alloc().initWithLevelCategory(
       this._convertSentryLevel(breadcrumb.level),
       breadcrumb.category
     );
@@ -53,7 +53,7 @@ export class Sentry {
     SentryClient.sharedClient.breadcrumbs.addBreadcrumb(sentryBC);
   }
 
-  public static setContextUser(user: SentryUser): void {
+  public static setContextUser(user: SentryUser) {
     const userNative = SentryUser.alloc().initWithUserId(user.id);
     userNative.email = user.email ? user.email : '';
     userNative.username = user.username ? user.username : '';
@@ -62,7 +62,6 @@ export class Sentry {
 
   public static setContextTags(tags: object) {
     SentryClient.sharedClient.tags = tags;
-    console.log('set the tags to the client');
   }
   public static setContextExtra(extra: object) {
     SentryClient.sharedClient.extra = extra;
@@ -78,7 +77,6 @@ export class Sentry {
    */
   private static _convertSentryLevel(level: Level) {
     if (!level) {
-      console.log('no level provided so returning INFO type');
       return SentrySeverity.kSentrySeverityInfo;
     }
 

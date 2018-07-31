@@ -69,16 +69,14 @@ export class Sentry {
   public static setContextTags(tags: object) {
     const sentryClient = io.sentry.Sentry.getStoredClient();
     Object.keys(tags).forEach(key => {
-      console.log('setting tags key', key);
-      sentryClient.addTag(key, tags[key]);
+      sentryClient.addTag(key, tags[key].toString());
     });
   }
 
   public static setContextExtra(extra: object) {
     const sentryClient = io.sentry.Sentry.getStoredClient();
     Object.keys(extra).forEach(key => {
-      console.log('setting extra key', key);
-      sentryClient.addExtra(key, extra[key]);
+      sentryClient.addExtra(key, extra[key].toString());
     });
   }
 
