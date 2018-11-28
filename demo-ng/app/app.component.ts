@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Sentry, SentryBreadcrumb } from 'nativescript-sentry';
+import { Sentry, BreadCrumb, Level } from 'nativescript-sentry';
 
 @Component({
   selector: 'ns-app',
@@ -19,6 +19,7 @@ export class AppComponent implements OnInit {
     // }, 3000);
     // });
     Sentry.setContextUser({
+      id: '1',
       email: 'daniel@fnaile.com',
       username: 'danielgek'
     });
@@ -57,12 +58,13 @@ export class AppComponent implements OnInit {
   }
 
   onTapBreadcrumb() {
-    const breadcrumb: SentryBreadcrumb = {
+    const breadcrumb: BreadCrumb = {
       message: 'bazinga, you got a breadcrumb message',
       category: 'breadcrumb category',
-      data: {
-        custom: 'value'
-      }
+      level: Level.Warning
+      // data: {
+      //   custom: 'value'
+      // }
     };
     Sentry.captureBreadcrumb(breadcrumb);
   }

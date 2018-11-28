@@ -8,7 +8,7 @@ import { AppComponent } from './app.component';
   imports: [
     NativeScriptModule,
     SentryModule.forRoot({
-      dsn: 'https://58d98e428d6746998c1898bdf129533a:5a2b4c3bfdbd4656b8777b1b271343a9@watson.mysns.pt/4'
+      dsn: 'https://10b5f0389dfe422cb6127e67c4af05e9@sentry.io/1320301'
     })
   ],
   declarations: [AppComponent],

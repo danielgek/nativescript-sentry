@@ -13,12 +13,15 @@ tns plugin add nativescript-sentry
 ## Usage
 
 ### Without Angular
+
 ```typescript
 import { Sentry } from 'nativescript-sentry';
 const dsn = 'https://<key>:<secret>@host/<project>';
 Sentry.init(dsn);
 ```
+
 ### With Angular
+
 ```typescript
 import { SentryModule } from 'nativescript-sentry/angular';
 
@@ -36,81 +39,106 @@ NgModule({
 
 ### Init Sentry
 
-`Sentry.init(dsn: string, options: SentryOptions)`
+```typescript
+Sentry.init(dsn: string);
+```
 
 ### Capture Exception
 
-`Sentry.captureException(exeption: Error, options: SentryOptions)`
+```typescript
+Sentry.captureException(exeption: Error, options?: ExceptionOptions);
+```
 
 Example:
+
 ```typescript
 try {
-    throw 'try catch Exception example'
-} catch(error) {
-    Sentry.captureException(error, {});
+  throw 'try catch Exception example';
+} catch (error) {
+  Sentry.captureException(error, {});
 }
 ```
 
 ### Capture Message
 
-`Sentry.captureMessage(message: string, options: SentryOptions)`
+```typescript
+Sentry.captureMessage(message: string, options?: MessageOptions)
+```
 
 ### Capture BreadCrumb
 
-`Sentry.captureBreadcrumb(breadcrumb:SentryBreadcrumb)`
+```typescript
+Sentry.captureBreadcrumb(breadcrumb: BreadCrumb)
+```
 
-### Set Current user
+### Set Context user
 
-`Sentry.setContextUser(user: SentryUser)`
+```typescript
+Sentry.setContextUser(user: SentryUser)
+```
 
 ### Context Tags
 
-`Sentry.setContextTags(tags: any)`
+```typescript
+Sentry.setContextTags(tags: object)
+```
 
 ### Context Extra
 
-`Sentry.setContextExtra(extra: any)`
+```typescript
+Sentry.setContextExtra(extra: object)
+```
 
 ### Clear context
 
-`Sentry.clearContext()``
-
+```typescript
+Sentry.clearContext();
+```
 
 ### Next features:
 
-* set device props from device(missing orientation/battery)
-* IOs native breadcrumbs
-* callback for events
+- callback for events
 
 ### Changelog:
+
+**28/11/2018 - (1.8.0):**
+
+- back to native approach
+- update dependencies
+- update test app
+- native breadcrums for ios
+- fix dsn init: credits:
 
 **11/12/2017 - (1.5.0):**
 
 **BREAKING CHANGES**
-* `capture()` method was deprecated in favor of `captureMessage`/`captureException`
+
+- `capture()` method was deprecated in favor of `captureMessage`/`captureException`
 
 **Features**
-* Moving to an hybrid approach with both clients(web/native)
-* breadcrums
-* tags
-* user info
-* set tags and extra for each event
+
+- Moving to an hybrid approach with both clients(web/native)
+- breadcrums
+- tags
+- user info
+- set tags and extra for each event
 
 **28-08-2017 - (1.3.0):**
-* fix Aot compilation for angular apps
-* fix typos thanks to @muratcorlu 
+
+- fix Aot compilation for angular apps
+- fix typos thanks to @muratcorlu
 
 **2-08-2017 - (1.2.0):**
-* update demos dependencies
-* update ios and android native dependencies
-* fix ios event capture
+
+- update demos dependencies
+- update ios and android native dependencies
+- fix ios event capture
 
 **24-07-2017 - (1.1.0):**
 
-* fix stringify
-* fix angular error handler
+- fix stringify
+- fix angular error handler
 
 ## Credits:
 
-* **@hypery2k**: for his **nativescript-fabric**(helped me a lot!)
-
+- **@hypery2k**: for his **nativescript-fabric**(helped me a lot!)

@@ -11,33 +11,35 @@ export class Sentry {
   }
 
   public static captureMessage(message: string, options?: MessageOptions) {
-    if (options && options.extra) {
-      this.setContextExtra(options.extra);
-    }
-
-    if (options && options.tags) {
-      this.setContextTags(options.tags);
-    }
     const level = options && options.level ? options.level : null;
 
     const event = SentryEvent.alloc().initWithLevel(this._convertSentryLevel(level));
     event.message = message;
+
+    if (options && options.extra) {
+      event.tags = NSDictionary.dictionaryWithDictionary(options.extra as NSDictionary<string, string>);
+    }
+
+    if (options && options.tags) {
+      event.tags = NSDictionary.dictionaryWithDictionary(options.tags as NSDictionary<string, string>);
+    }
     SentryClient.sharedClient.sendEventWithCompletionHandler(event, () => {
       // nothing here
     });
   }
 
   public static captureException(exception: Error, options?: ExceptionOptions) {
+    const event = SentryEvent.alloc().initWithLevel(SentrySeverity.kSentrySeverityError);
+    event.message = exception.stack ? exception.stack : exception.message;
+
     if (options && options.extra) {
-      this.setContextExtra(options.extra);
+      event.tags = NSDictionary.dictionaryWithDictionary(options.extra as NSDictionary<string, string>);
     }
 
     if (options && options.tags) {
-      this.setContextTags(options.tags);
+      event.tags = NSDictionary.dictionaryWithDictionary(options.tags as NSDictionary<string, string>);
     }
 
-    const event = SentryEvent.alloc().initWithLevel(SentrySeverity.kSentrySeverityError);
-    event.message = exception.stack ? exception.stack : exception.message;
     SentryClient.sharedClient.sendEventWithCompletionHandler(event, () => {
       // nothing here
     });
@@ -60,11 +62,11 @@ export class Sentry {
     SentryClient.sharedClient.user = userNative;
   }
 
-  public static setContextTags(tags: object) {
-    SentryClient.sharedClient.tags = tags;
+  public static setContextTags(tags: any) {
+    SentryClient.sharedClient.tags = NSDictionary.dictionaryWithDictionary(tags as NSDictionary<string, string>);
   }
-  public static setContextExtra(extra: object) {
-    SentryClient.sharedClient.extra = extra;
+  public static setContextExtra(extra: any) {
+    SentryClient.sharedClient.extra = NSDictionary.dictionaryWithDictionary(extra as NSDictionary<string, string>);
   }
 
   public static clearContext() {

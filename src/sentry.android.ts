@@ -13,22 +13,26 @@ export class Sentry {
   }
 
   public static captureMessage(message: string, options?: MessageOptions) {
+    const level = options && options.level ? options.level : null;
+
+    let event = new io.sentry.event.EventBuilder().withMessage(message).withLevel(this._convertSentryEventLevel(level));
+
     if (options && options.extra) {
-      this.setContextExtra(options.extra);
+      Object.keys(options.extra).forEach(key => {
+        event = event.withExtra(key, options.extra[key].toString());
+      });
     }
 
     if (options && options.tags) {
-      this.setContextTags(options.tags);
+      Object.keys(options.tags).forEach(key => {
+        event = event.withTag(key, options.tags[key].toString());
+      });
     }
-    const level = options && options.level ? options.level : null;
-
-    const event = new io.sentry.event.EventBuilder()
-      .withMessage(message)
-      .withLevel(this._convertSentryEventLevel(level));
     io.sentry.Sentry.getStoredClient().sendEvent(event);
   }
 
   public static captureException(exception: Error, options?: ExceptionOptions) {
+    // TODO: attach tags and extra directly on the exeption
     if (options && options.extra) {
       this.setContextExtra(options.extra);
     }
