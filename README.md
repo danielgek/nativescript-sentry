@@ -33,7 +33,7 @@ NgModule({
 
 ```
 
-**Note:** this plugin adds a custom ErrorHandler and automatically provides it
+**Note:** this plugin adds a custom ErrorHandler to your angular app
 
 ## API
 
@@ -101,13 +101,13 @@ Sentry.clearContext();
 
 ### Changelog:
 
-**28/11/2018 - (1.8.0):**
+**28/11/2018 - (1.6.1):**
 
-- back to native approach
+- back to native approach thanks to **@bradmartin**
 - update dependencies
 - update test app
-- native breadcrums for ios
-- fix dsn init: credits:
+- working native breadcrums for ios
+- fix dsn init thanks to **@kvnvelasco**
 
 **11/12/2017 - (1.5.0):**
 
