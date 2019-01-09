@@ -1,16 +1,19 @@
-# Sentry.io for nativescript
+# Sentry.io for NativeScript
+
+[![npm](https://img.shields.io/npm/v/nativescript-sentry.svg)](https://www.npmjs.com/package/nativescript-sentry)
+[![npm](https://img.shields.io/npm/dt/nativescript-sentry.svg?label=npm%20downloads)](https://www.npmjs.com/package/nativescript-sentry)
 
 This plugin uses sentry-android and sentry-cocoa to catch native errors/stack traces and send them to a sentry server.
 
 **NOTE:** If you have a **native exeption** and the app exits the plugin will save the log and send it in the **next app startup**, this is how the native plugins are implemented and it is expected behavior
 
-## Installation
+# Installation
 
 ```javascript
 tns plugin add nativescript-sentry
 ```
 
-## Usage
+# Config
 
 ### Without Angular
 
@@ -35,15 +38,9 @@ NgModule({
 
 **Note:** this plugin adds a custom ErrorHandler to your angular app
 
-## API
+# API
 
-### Init Sentry
-
-```typescript
-Sentry.init(dsn: string);
-```
-
-### Capture Exception
+#### Capture Exception
 
 ```typescript
 Sentry.captureException(exeption: Error, options?: ExceptionOptions);
@@ -59,47 +56,101 @@ try {
 }
 ```
 
-### Capture Message
+#### Capture Message
 
 ```typescript
 Sentry.captureMessage(message: string, options?: MessageOptions)
 ```
 
-### Capture BreadCrumb
+#### Capture BreadCrumb
 
 ```typescript
 Sentry.captureBreadcrumb(breadcrumb: BreadCrumb)
 ```
 
-### Set Context user
+#### Set Context user
 
 ```typescript
 Sentry.setContextUser(user: SentryUser)
 ```
 
-### Context Tags
+#### Context Tags
 
 ```typescript
 Sentry.setContextTags(tags: object)
 ```
 
-### Context Extra
+#### Context Extra
 
 ```typescript
 Sentry.setContextExtra(extra: object)
 ```
 
-### Clear context
+#### Clear context
 
 ```typescript
 Sentry.clearContext();
+```
+
+## Enums
+
+```typescript
+export enum Level {
+  Fatal = 'fatal',
+  Error = 'error',
+  Warning = 'warning',
+  Info = 'info',
+  Debug = 'debug'
+}
+```
+
+## Interfaces
+
+```typescript
+export interface SentryUser {
+  id: string;
+  email?: string;
+  username?: string;
+}
+
+export interface BreadCrumb {
+  message: string;
+  category: string;
+  level: Level;
+}
+
+export interface MessageOptions {
+  level?: Level;
+
+  /**
+   * Object of additional Key/value pairs which generate breakdowns charts and search filters.
+   */
+  tags?: object;
+
+  /**
+   * Object of unstructured data which is stored with events.
+   */
+  extra?: object;
+}
+
+export interface ExceptionOptions {
+  /**
+   * Object of additional Key/value pairs which generate breakdowns charts and search filters in Sentry.
+   */
+  tags?: object;
+
+  /**
+   * Object of unstructured data which is stored with events.
+   */
+  extra?: object;
+}
 ```
 
 ### Next features:
 
 - callback for events
 
-### Changelog:
+## Changelog:
 
 **28/11/2018 - (1.6.1):**
 

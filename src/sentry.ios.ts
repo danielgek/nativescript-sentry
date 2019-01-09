@@ -30,7 +30,13 @@ export class Sentry {
 
   public static captureException(exception: Error, options?: ExceptionOptions) {
     const event = SentryEvent.alloc().initWithLevel(SentrySeverity.kSentrySeverityError);
-    event.message = exception.stack ? exception.stack : exception.message;
+
+    // create a string of the entire Error for sentry to display as much info as possible
+    event.message = JSON.stringify({
+      message: exception.message,
+      stacktrace: exception.stack,
+      name: exception.name
+    });
 
     if (options && options.extra) {
       event.tags = NSDictionary.dictionaryWithDictionary(options.extra as NSDictionary<string, string>);
