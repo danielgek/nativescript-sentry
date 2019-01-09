@@ -94,4 +94,11 @@ export interface ExceptionOptions {
    * Object of unstructured data which is stored with events.
    */
   extra?: object;
+
+  /**
+   * ** iOS Only **
+   * A boolean value that when true the provided Error instance will be sent to Sentry as a stringified JSON object.
+   * This will allow Sentry to have the `Error.message, Error.name, and Error.stacktrace` included.
+   */
+  useJsonError?: boolean;
 }

@@ -41,7 +41,12 @@ export class Sentry {
       this.setContextTags(options.tags);
     }
 
-    const ex = new java.lang.Throwable(exception.stack);
+    const cause = new java.lang.Throwable(exception.stack);
+
+    // creating a new Exception to send to Sentry which will include the
+    // JS Error stacktrace as the "cause" and the JS Error message as the Throwable "message"
+    // https://developer.android.com/reference/java/lang/Exception.html#Exception(java.lang.String,%20java.lang.Throwable)
+    const ex = new java.lang.Exception(exception.message, cause);
     io.sentry.Sentry.getStoredClient().sendException(ex);
   }
 

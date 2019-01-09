@@ -32,6 +32,16 @@ export class Sentry {
     const event = SentryEvent.alloc().initWithLevel(SentrySeverity.kSentrySeverityError);
     event.message = exception.stack ? exception.stack : exception.message;
 
+    // if the user wants to use JSON error, set the event.message
+    if (options && options.useJsonError === true) {
+      // event.message = JSON.stringify(exception);
+      event.message = JSON.stringify({
+        message: exception.message,
+        stacktrace: exception.stack,
+        name: exception.name
+      });
+    }
+
     if (options && options.extra) {
       event.tags = NSDictionary.dictionaryWithDictionary(options.extra as NSDictionary<string, string>);
     }
