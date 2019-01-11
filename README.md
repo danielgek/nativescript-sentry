@@ -7,6 +7,25 @@ This plugin uses sentry-android and sentry-cocoa to catch native errors/stack tr
 
 **NOTE:** If you have a **native exeption** and the app exits the plugin will save the log and send it in the **next app startup**, this is how the native plugins are implemented and it is expected behavior
 
+#### Android SLF4J Log Error
+
+> Sentry has an optional dependency on SLF4J on Android.
+> Which when not present will log an error about it not being in the application.
+>
+> ```
+> System.err: SLF4J: Failed to load class >"org.slf4j.impl.StaticLoggerBinder".
+> System.err: SLF4J: Defaulting to no-operation (NOP) logger implementation
+> System.err: SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder >for further details.
+> ```
+>
+> To get rid of this log warning you can add a dependency to your app's app.gradle file located in `App_Resources/Android/app.gradle` to include:
+>
+> ```
+>  compile 'org.slf4j:slf4j-nop:1.7.25'
+> ```
+>
+> in the dependencies. See the demo app [here](/demo/app/App_Resources/Android/app.gradle)
+
 # Installation
 
 ```javascript
