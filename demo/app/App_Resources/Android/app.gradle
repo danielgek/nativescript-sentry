@@ -1,9 +1,9 @@
 // Add your native dependencies here:
 
 // Uncomment to add recyclerview-v7 dependency
-//dependencies {
-//	compile 'com.android.support:recyclerview-v7:+'
-//}
+dependencies {
+  compile 'org.slf4j:slf4j-nop:1.7.25'
+}
 
 android {  
   defaultConfig {  
