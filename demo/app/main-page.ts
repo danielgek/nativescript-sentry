@@ -1,9 +1,7 @@
-import { Sentry, TNS_SentryBreadCrumb } from 'nativescript-sentry';
-import { TNS_SentryLevel } from 'nativescript-sentry/sentry.common';
+import { Sentry, BreadCrumb, Level } from 'nativescript-sentry';
 import { EventData } from 'tns-core-modules/data/observable';
 import { Page } from 'tns-core-modules/ui/page';
 import { HelloWorldModel } from './main-view-model';
-
 
 // Event handler for Page 'loaded' event attached in main-page.xml
 export function pageLoaded(args: EventData) {
@@ -18,22 +16,43 @@ export function onTapMain(eventData) {
 
 export function onTapTry(eventData) {
   try {
-    throw new Error('Not good');
+    throw new Error('Oh No! Something went wrong.');
   } catch (error) {
-    Sentry.captureException(error, {});
+    Sentry.captureException(error, {
+      tags: {
+        exception: 17227,
+        app_name: 'sentry-demo'
+      },
+      extra: {
+        number_extra: 1,
+        bool_extra: true,
+        string_extra: 'oh snap!'
+      }
+    });
   }
 }
 
 export function message() {
-  Sentry.captureMessage('brad test', TNS_SentryLevel.Info);
+  Sentry.captureMessage('Sentry Test Message', {
+    level: Level.Info,
+    tags: {
+      number: 3843,
+      string: 'Message Tag'
+    },
+    extra: {
+      string_extra: 'Bullseye',
+      number_extra: 18291,
+      bool_extra: false
+    }
+  });
 }
 
 export function onTapBreadcrumb() {
   try {
-    const breadcrumb: TNS_SentryBreadCrumb = {
+    const breadcrumb: BreadCrumb = {
       message: 'bazinga, you got a breadcrumb message',
       category: 'breadcrumb category',
-      level: TNS_SentryLevel.Info
+      level: Level.Info
     };
     Sentry.captureBreadcrumb(breadcrumb);
   } catch (error) {
