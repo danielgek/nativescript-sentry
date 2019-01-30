@@ -17,7 +17,7 @@ export class Sentry {
     event.message = message;
 
     if (options && options.extra) {
-      event.tags = NSDictionary.dictionaryWithDictionary(options.extra as NSDictionary<string, string>);
+      event.extra = NSDictionary.dictionaryWithDictionary(options.extra as NSDictionary<string, any>);
     }
 
     if (options && options.tags) {
@@ -39,7 +39,7 @@ export class Sentry {
     });
 
     if (options && options.extra) {
-      event.tags = NSDictionary.dictionaryWithDictionary(options.extra as NSDictionary<string, string>);
+      event.extra = NSDictionary.dictionaryWithDictionary(options.extra as NSDictionary<string, any>);
     }
 
     if (options && options.tags) {
@@ -72,7 +72,7 @@ export class Sentry {
     SentryClient.sharedClient.tags = NSDictionary.dictionaryWithDictionary(tags as NSDictionary<string, string>);
   }
   public static setContextExtra(extra: any) {
-    SentryClient.sharedClient.extra = NSDictionary.dictionaryWithDictionary(extra as NSDictionary<string, string>);
+    SentryClient.sharedClient.extra = NSDictionary.dictionaryWithDictionary(extra as NSDictionary<string, any>);
   }
 
   public static clearContext() {
