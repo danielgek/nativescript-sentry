@@ -18,14 +18,25 @@ export class Sentry {
     let event = new io.sentry.event.EventBuilder().withMessage(message).withLevel(this._convertSentryEventLevel(level));
 
     if (options && options.extra) {
+      // adding data type check to not limit extras to string values
+      // @link : https://github.com/danielgek/nativescript-sentry/issues/22
+      // for (const [key, value] of Object.entries(options.extra)) {
+      //   const nativeDataValue = Sentry._convertDataTypeToJavaObject(value);
+      //   event = event.withExtra(key, nativeDataValue);
+      // }
+
       Object.keys(options.extra).forEach(key => {
-        event = event.withExtra(key, options.extra[key].toString());
+        // adding type check to not force toString on the extra
+        // @link: https://github.com/danielgek/nativescript-sentry/issues/22
+        const nativeDataValue = Sentry._convertDataTypeToJavaObject(options.extra[key]);
+        event = event.withExtra(key, nativeDataValue);
       });
     }
 
     if (options && options.tags) {
+      // tags are required as strings
       Object.keys(options.tags).forEach(key => {
-        event = event.withTag(key, options.tags[key].toString());
+        event.withTag(key, options.tags[key].toString());
       });
     }
     io.sentry.Sentry.getStoredClient().sendEvent(event);
@@ -85,7 +96,10 @@ export class Sentry {
   public static setContextExtra(extra: object) {
     const sentryClient = io.sentry.Sentry.getStoredClient();
     Object.keys(extra).forEach(key => {
-      sentryClient.addExtra(key, extra[key].toString());
+      // adding type check to not force toString on the extra
+      // @link: https://github.com/danielgek/nativescript-sentry/issues/22
+      const nativeDataValue = Sentry._convertDataTypeToJavaObject(extra[key]);
+      sentryClient.addExtra(key, nativeDataValue);
     });
   }
 
@@ -137,6 +151,22 @@ export class Sentry {
       default:
         return io.sentry.event.Event.Level.INFO;
     }
+  }
+
+  /**
+   * Takes the provided value and checks for boolean or number and creates a native data type instance.
+   * @param value
+   */
+  private static _convertDataTypeToJavaObject(value) {
+    let result = null;
+    if (typeof value === typeof true) {
+      result = new java.lang.Boolean(value);
+    } else if (!isNaN(value)) {
+      result = new java.lang.Integer(value);
+    } else {
+      result = new java.lang.String(value);
+    }
+    return result;
   }
 }
 
