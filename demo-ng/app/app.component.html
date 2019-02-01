@@ -1,10 +1,18 @@
-<ActionBar title="Testing sentry" class="action-bar">
-</ActionBar>
+<ActionBar title="Testing sentry" class="action-bar"> </ActionBar>
 <StackLayout>
-    <Button (tap)="onTapNative()" class="btn btn-primary" text="Main thread exeption test(native)"></Button>
-    <Button (tap)="onTapTryError()" class="btn btn-primary" text="Try trow with Error test"></Button>
-    <Button (tap)="onTapTry()" class="btn btn-primary" text="Try trow without Error test"></Button>
-    <Button (tap)="onTapMessage()" class="btn btn-primary" text="Capture Message"></Button>
-    <Button (tap)="onTapBreadcrumb()" class="btn btn-primary" text="Capture Breadcrumb"></Button>
-    <Button (tap)="onTapCaptureWithExtras()" class="btn btn-primary" text="Capture Event with tags and extras"></Button>
+  <Label text="TextField below is for setting the user email for the Sentry logs." class="h3" textWrap="true"></Label>
+  <TextField hint="User Email" [text]="user_email"></TextField>
+  <Button text="Set Sentry User" class="btn btn-primary" (tap)="setSentryUser()"></Button>
+  <Label
+    class="h3"
+    text="This will crash the app and throw the application's uncaughtErrorEvent."
+    textWrap="true"
+  ></Label>
+  <Button (tap)="onTapNative()" class="btn btn-primary" text="Uncaught Error (crash app)"></Button>
+  <Label text=" " height="1" backgroundColor="#ff4081" width="100%" textWrap="true" margin="10 4 10 4"></Label>
+  <Button (tap)="onTapTryError()" class="btn btn-primary" text="Try trow with Error test"></Button>
+  <Button (tap)="onTapTry()" class="btn btn-primary" text="Try trow without Error test"></Button>
+  <Button (tap)="onTapMessage()" class="btn btn-primary" text="Capture Message"></Button>
+  <Button (tap)="onTapBreadcrumb()" class="btn btn-primary" text="Capture Breadcrumb"></Button>
+  <Button (tap)="onTapCaptureWithExtras()" class="btn btn-primary" text="Capture Event with tags and extras"></Button>
 </StackLayout>

@@ -6,30 +6,27 @@
   "nativescript": {
     "id": "org.nativescript.demong",
     "tns-android": {
-      "version": "4.2.0"
-    },
-    "tns-ios": {
-      "version": "4.2.0"
+      "version": "5.1.0"
     }
   },
   "dependencies": {
-    "@angular/animations": "^6.1.10",
-    "@angular/common": "^6.1.10",
-    "@angular/compiler": "^6.1.10",
-    "@angular/core": "^6.1.10",
-    "@angular/forms": "^6.1.10",
-    "@angular/http": "^6.1.10",
-    "@angular/platform-browser": "^6.1.10",
-    "@angular/platform-browser-dynamic": "^6.1.10",
-    "@angular/platform-server": "^6.1.10",
-    "@angular/router": "^6.1.10",
-    "nativescript-angular": "^6.2.0",
+    "@angular/animations": "^7.2.3",
+    "@angular/common": "^7.2.3",
+    "@angular/compiler": "^7.2.3",
+    "@angular/core": "^7.2.3",
+    "@angular/forms": "^7.2.3",
+    "@angular/http": "^7.2.3",
+    "@angular/platform-browser": "^7.2.3",
+    "@angular/platform-browser-dynamic": "^7.2.3",
+    "@angular/platform-server": "^7.2.3",
+    "@angular/router": "^7.2.3",
+    "nativescript-angular": "^7.2.0",
     "nativescript-sentry": "file:../src",
     "nativescript-theme-core": "~1.0.4",
     "reflect-metadata": "~0.1.12",
     "rxjs": "~6.3.3",
     "rxjs-compat": "^6.3.3",
-    "tns-core-modules": "~4.2.1",
+    "tns-core-modules": "~5.1.2",
     "zone.js": "~0.8.26"
   },
   "devDependencies": {
@@ -37,7 +34,7 @@
     "babel-types": "6.26.0",
     "babylon": "6.18.0",
     "lazy": "1.0.11",
-    "nativescript-dev-typescript": "~0.7.4",
-    "typescript": "~2.8.4"
+    "nativescript-dev-typescript": "~0.7.9",
+    "typescript": "~3.3.1"
   }
 }

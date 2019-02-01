@@ -6,23 +6,9 @@ import { Sentry, BreadCrumb, Level } from 'nativescript-sentry';
   templateUrl: 'app.component.html'
 })
 export class AppComponent implements OnInit {
+  public user_email = 'test@sentry-test.io';
+
   ngOnInit() {
-    // Sentry.onBeforeSend((event) => {
-    // event.tags = NSDictionary.alloc<string, string>().initWithObjectsForKeys(
-    //     utils.ios.collections.jsArrayToNSArray(['true', 'true']) as NSArray<string>,
-    //     utils.ios.collections.jsArrayToNSArray(['tag1', 'tag2']) as NSArray<string>
-    // );
-    // console.log('passei no componente antes de enviar o evento');
-    // setTimeout(() => {
-    //     console.log('vou returnar true no component');
-    //     return true;
-    // }, 3000);
-    // });
-    Sentry.setContextUser({
-      id: '1',
-      email: 'daniel@fnaile.com',
-      username: 'danielgek'
-    });
     Sentry.setContextTags({
       tag1: 'value1',
       tag2: 'value2'
@@ -33,40 +19,88 @@ export class AppComponent implements OnInit {
     });
   }
 
-  onTapTry(eventData) {
+  setSentryUser() {
+    Sentry.setContextUser({
+      id: '1',
+      email: this.user_email,
+      data: {
+        bool_value: false,
+        string_value: 'test string',
+        number_value: 35,
+        created: {
+          date: 'January 1, 1999',
+          picture_url: 'https://docs.sentry.io/'
+        }
+      }
+    });
+  }
+
+  onTapNative() {
+    throw 'Uncaught Error Exception thrown inside NativeScript app.';
+  }
+
+  onTapTry() {
     try {
-      throw 'try catch exeption example';
+      throw new Error('Oh No! Something went wrong.');
     } catch (error) {
-      Sentry.captureException(error, {});
+      Sentry.captureException(error, {
+        tags: {
+          exception: 17227,
+          app_name: 'sentry-demo'
+        },
+        extra: {
+          number_extra: 1,
+          bool_extra: true,
+          string_extra: 'oh snap!'
+        }
+      });
     }
   }
 
-  onTapTryError(eventData) {
+  onTapTryError() {
     try {
-      throw new Error('try catch exeption example');
+      throw new Error('Oh No! Something went wrong.');
     } catch (error) {
-      Sentry.captureException(error, {});
+      Sentry.captureException(error, {
+        tags: {
+          exception: 18219,
+          app_name: 'sentry-demo'
+        },
+        extra: {
+          number_extra: 1,
+          bool_extra: true,
+          string_extra: 'oh snap!'
+        }
+      });
     }
-  }
-
-  onTapNative(eventData) {
-    throw 'Test Sentry on Main thread';
   }
 
   onTapMessage() {
-    Sentry.captureMessage('bazinga, you got a message', {});
+    Sentry.captureMessage('Sentry Test Message', {
+      level: Level.Info,
+      tags: {
+        number: 3843,
+        string: 'Message Tag'
+      },
+      extra: {
+        string_extra: 'Bullseye',
+        number_extra: 18291,
+        bool_extra: false
+      }
+    });
   }
 
   onTapBreadcrumb() {
-    const breadcrumb: BreadCrumb = {
-      message: 'bazinga, you got a breadcrumb message',
-      category: 'breadcrumb category',
-      level: Level.Warning
-      // data: {
-      //   custom: 'value'
-      // }
-    };
-    Sentry.captureBreadcrumb(breadcrumb);
+    try {
+      const breadcrumb: BreadCrumb = {
+        message: 'bazinga, you got a breadcrumb message',
+        category: 'breadcrumb category',
+        level: Level.Info
+      };
+      Sentry.captureBreadcrumb(breadcrumb);
+    } catch (error) {
+      console.log('app error', error);
+    }
   }
 
   onTapCaptureWithExtras() {

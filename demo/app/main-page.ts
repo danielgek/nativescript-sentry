@@ -1,20 +1,40 @@
 import { Sentry, BreadCrumb, Level } from 'nativescript-sentry';
-import { EventData } from 'tns-core-modules/data/observable';
+import { EventData, Observable } from 'tns-core-modules/data/observable';
 import { Page } from 'tns-core-modules/ui/page';
-import { HelloWorldModel } from './main-view-model';
+
+let obsData: Observable;
+const USER_EMAIL = 'USER_EMAIL';
 
 // Event handler for Page 'loaded' event attached in main-page.xml
 export function pageLoaded(args: EventData) {
   // Get the event sender
   const page = args.object as Page;
-  page.bindingContext = new HelloWorldModel();
+  obsData = new Observable();
+  obsData.set('user_email', 'test@sentry-test.io');
+  page.bindingContext = obsData;
 }
 
-export function onTapMain(eventData) {
+export function setSentryUser() {
+  Sentry.setContextUser({
+    id: '19210029akd01jjd9102',
+    email: obsData.get('user_email'),
+    data: {
+      bool_value: false,
+      string_value: 'test string',
+      number_value: 35,
+      created: {
+        date: 'January 1, 1999',
+        picture_url: 'https://docs.sentry.io/'
+      }
+    }
+  });
+}
+
+export function onTapNative() {
   throw 'Uncaught Error Exception thrown inside NativeScript app.';
 }
 
-export function onTapTry(eventData) {
+export function onTapTryError() {
   try {
     throw new Error('Oh No! Something went wrong.');
   } catch (error) {
@@ -32,7 +52,7 @@ export function onTapTry(eventData) {
   }
 }
 
-export function message() {
+export function onTapMessage() {
   Sentry.captureMessage('Sentry Test Message', {
     level: Level.Info,
     tags: {

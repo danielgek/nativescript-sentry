@@ -1,13 +1,4 @@
-import {
-  ErrorHandler,
-  Injectable,
-  InjectionToken,
-  ModuleWithProviders,
-  NgModule,
-  NO_ERRORS_SCHEMA,
-  Optional
-} from '@angular/core';
-import { Sentry } from '../';
+import { ErrorHandler, InjectionToken, ModuleWithProviders, NgModule } from '@angular/core';
 import { SentryErrorHandler } from './error.handler';
 
 export interface SentryConfig {
