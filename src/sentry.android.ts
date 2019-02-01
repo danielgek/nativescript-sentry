@@ -18,15 +18,7 @@ export class Sentry {
     let event = new io.sentry.event.EventBuilder().withMessage(message).withLevel(this._convertSentryEventLevel(level));
 
     if (options && options.extra) {
-      // adding data type check to not limit extras to string values
-      // @link : https://github.com/danielgek/nativescript-sentry/issues/22
-      // for (const [key, value] of Object.entries(options.extra)) {
-      //   const nativeDataValue = Sentry._convertDataTypeToJavaObject(value);
-      //   event = event.withExtra(key, nativeDataValue);
-      // }
-
       Object.keys(options.extra).forEach(key => {
-        // adding type check to not force toString on the extra
         // @link: https://github.com/danielgek/nativescript-sentry/issues/22
         const nativeDataValue = Sentry._convertDataTypeToJavaObject(options.extra[key]);
         event = event.withExtra(key, nativeDataValue);
@@ -75,10 +67,22 @@ export class Sentry {
   }
 
   public static setContextUser(user: SentryUser) {
+    // handle the data object if provided
+    let nativeMapObject: java.util.HashMap<any, any>;
+    if (user.data) {
+      nativeMapObject = new java.util.HashMap<any, any>();
+      Object.keys(user.data).forEach(key => {
+        // @link: https://github.com/danielgek/nativescript-sentry/issues/22
+        const nativeDataValue = Sentry._convertDataTypeToJavaObject(user.data[key]);
+        nativeMapObject.put(key, nativeDataValue);
+      });
+    }
+
     const userNative = new io.sentry.event.UserBuilder()
       .setId(user.id)
       .setEmail(user.email ? user.email : '')
       .setUsername(user.username ? user.username : '')
+      .setData(nativeMapObject ? nativeMapObject : null)
       .build();
 
     io.sentry.Sentry.getStoredClient()
@@ -158,15 +162,57 @@ export class Sentry {
    * @param value
    */
   private static _convertDataTypeToJavaObject(value) {
-    let result = null;
-    if (typeof value === typeof true) {
-      result = new java.lang.Boolean(value);
-    } else if (!isNaN(value)) {
-      result = new java.lang.Integer(value);
-    } else {
-      result = new java.lang.String(value);
+    if (value === null) {
+      return null;
     }
-    return result;
+
+    switch (typeof value) {
+      case 'object':
+        if (value instanceof Date) {
+          return new java.lang.String(value.toISOString());
+        }
+
+        if (Array.isArray(value)) {
+          const nativeList = new java.util.ArrayList();
+          value.forEach(data => {
+            nativeList.add(this._convertDataTypeToJavaObject(data));
+          });
+          return nativeList;
+        }
+
+        const nativeObject = new java.util.HashMap();
+        Object.keys(value).forEach(itemKey => {
+          nativeObject.put(itemKey, this._convertDataTypeToJavaObject(value[itemKey]));
+        });
+
+        return nativeObject;
+      case 'number':
+        if (this._numberIs64Bit(value)) {
+          if (this._numberHasDecimals(value)) {
+            return new java.lang.Double(value);
+          } else {
+            return new java.lang.Long(value);
+          }
+        } else {
+          if (this._numberHasDecimals(value)) {
+            return new java.lang.Float(value);
+          } else {
+            return new java.lang.Integer(value);
+          }
+        }
+      case 'boolean':
+        return new java.lang.Boolean(value);
+    }
+
+    return new java.lang.String(value);
+  }
+
+  private static _numberHasDecimals(value: number) {
+    return !(value % 1 === 0);
+  }
+
+  private static _numberIs64Bit(value: number) {
+    return value < -Math.pow(2, 31) + 1 || value > Math.pow(2, 31) - 1;
   }
 }
 
