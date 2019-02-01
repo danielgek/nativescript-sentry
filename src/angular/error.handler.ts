@@ -15,7 +15,7 @@ export class SentryErrorHandler extends ErrorHandler {
 
   handleError(err): void {
     try {
-      Sentry.captureException(err, null);
+      Sentry.captureException(err);
     } catch (e) {
       console.log('[NativeScript-Sentry - SentryErrorHandler]', e);
     }

@@ -1,4 +1,5 @@
 import { ErrorHandler, InjectionToken, ModuleWithProviders, NgModule } from '@angular/core';
+import { Sentry } from '../';
 import { SentryErrorHandler } from './error.handler';
 
 export interface SentryConfig {
@@ -12,7 +13,18 @@ export class SentryModule {
   static forRoot(config: SentryConfig): ModuleWithProviders {
     return {
       ngModule: SentryModule,
-      providers: [{ provide: SentryService, useValue: config }, { provide: ErrorHandler, useClass: SentryErrorHandler }]
+      providers: [
+        { provide: SentryService, useValue: config },
+        {
+          provide: ErrorHandler,
+          useFactory: provideSentryServiceOptions,
+          deps: [SentryService]
+        }
+      ]
     };
   }
+}
+
+export function provideSentryServiceOptions(config: SentryConfig) {
+  return new SentryErrorHandler(config);
 }
