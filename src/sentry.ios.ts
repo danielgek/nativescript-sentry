@@ -65,6 +65,11 @@ export class Sentry {
     const userNative = SentryUser.alloc().initWithUserId(user.id);
     userNative.email = user.email ? user.email : '';
     userNative.username = user.username ? user.username : '';
+    if (user.data) {
+      // create NSDictionary<string, any> for the object provided
+      const dict = NSDictionary.dictionaryWithDictionary(user.data as NSDictionary<string, any>);
+      userNative.extra = dict ? dict : null;
+    }
     SentryClient.sharedClient.user = userNative;
   }
 
