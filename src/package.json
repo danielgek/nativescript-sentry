@@ -1,6 +1,6 @@
 {
   "name": "nativescript-sentry",
-  "version": "1.7.1",
+  "version": "1.8.0",
   "description": "Sentry.io NativeScript plugin.",
   "main": "sentry",
   "typings": "index.d.ts",
@@ -74,7 +74,7 @@
     "tns-core-modules": "^4.2.1",
     "tns-platform-declarations": "^4.2.1",
     "prettier": "^1.15.2",
-    "typescript": "~3.2.4",
+    "typescript": "^2.9.2",
     "rxjs": "^6.3.3",
     "tslint": "^5.11.0",
     "husky": "^0.14.3",
