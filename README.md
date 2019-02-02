@@ -171,6 +171,14 @@ export interface ExceptionOptions {
 
 ## Changelog:
 
+**2/2/2019 - (1.8.0):**
+
+- bumps to latest native SDK releases
+- implements improved data converter(#22)
+- adds data to SentryUser
+
+Thanks to **@bradmartin** and **@jerbob92**!
+
 **28/11/2018 - (1.6.1):**
 
 - back to native approach thanks to **@bradmartin**
