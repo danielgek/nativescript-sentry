@@ -4,14 +4,15 @@
     </ActionBar>
   </Page.actionBar>
   <StackLayout class="p-20">
-  <Button text="Init Sentry" tap="initSentry" />
-  
+    <Label text="TextField below is setting the user email for the Sentry logs." class="h3" textWrap="true" />
+    <TextField hint="User Name" text="{{ user_email }}" />
+    <Button text="Set Sentry User" class="btn btn-primary" tap="setSentryUser" />
     <Label class="h3" text="This will crash the app and throw the application's uncaughtErrorEvent." textWrap="true" />
-    <Button tap="onTapMain" backgroundColor="red" color="white" text="Uncaught Error" />
-    <Label text="" height="1" backgroundColor="#ff4081" width="100%" textWrap="true" margin="10 4 10 4" />
+    <Button tap="onTapNative" backgroundColor="red" color="white" text="Uncaught Error" />
+    <Label text=" " height="1" backgroundColor="#ff4081" width="100%" textWrap="true" margin="10 4 10 4" />
     <Label class="h3" text="This will use the captureException method to catch an error and send to Sentry." textWrap="true" />
-    <Button tap="onTapTry" class="btn btn-primary" text="Capture Exception" />
-    <Button tap="message" class="btn btn-primary" text="Capture Message" />
+    <Button tap="onTapTryError" class="btn btn-primary" text="Capture Exception" />
+    <Button tap="onTapMessage" class="btn btn-primary" text="Capture Message" />
     <Button tap="onTapBreadcrumb" class="btn btn-primary" text="Capture Breadcrumb" />
   </StackLayout>
 </Page>

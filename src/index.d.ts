@@ -62,6 +62,7 @@ export interface SentryUser {
   id: string;
   email?: string;
   username?: string;
+  data?: object;
 }
 
 export interface BreadCrumb {

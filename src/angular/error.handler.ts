@@ -1,6 +1,6 @@
-import { ErrorHandler, Injectable, Inject } from '@angular/core';
+import { ErrorHandler, Inject, Injectable } from '@angular/core';
 import { Sentry } from '../';
-import { SentryService, SentryModule } from './app.module';
+import { SentryService } from './app.module';
 
 @Injectable()
 export class SentryErrorHandler extends ErrorHandler {

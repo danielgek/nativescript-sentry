@@ -19,13 +19,16 @@ export class Sentry {
 
     if (options && options.extra) {
       Object.keys(options.extra).forEach(key => {
-        event = event.withExtra(key, options.extra[key].toString());
+        // @link: https://github.com/danielgek/nativescript-sentry/issues/22
+        const nativeDataValue = Sentry._convertDataTypeToJavaObject(options.extra[key]);
+        event = event.withExtra(key, nativeDataValue);
       });
     }
 
     if (options && options.tags) {
+      // tags are required as strings
       Object.keys(options.tags).forEach(key => {
-        event = event.withTag(key, options.tags[key].toString());
+        event.withTag(key, options.tags[key].toString());
       });
     }
     io.sentry.Sentry.getStoredClient().sendEvent(event);
@@ -64,10 +67,22 @@ export class Sentry {
   }
 
   public static setContextUser(user: SentryUser) {
+    // handle the data object if provided
+    let nativeMapObject: java.util.HashMap<any, any>;
+    if (user.data) {
+      nativeMapObject = new java.util.HashMap<any, any>();
+      Object.keys(user.data).forEach(key => {
+        // @link: https://github.com/danielgek/nativescript-sentry/issues/22
+        const nativeDataValue = Sentry._convertDataTypeToJavaObject(user.data[key]);
+        nativeMapObject.put(key, nativeDataValue);
+      });
+    }
+
     const userNative = new io.sentry.event.UserBuilder()
       .setId(user.id)
       .setEmail(user.email ? user.email : '')
       .setUsername(user.username ? user.username : '')
+      .setData(nativeMapObject ? nativeMapObject : null)
       .build();
 
     io.sentry.Sentry.getStoredClient()
@@ -85,7 +100,10 @@ export class Sentry {
   public static setContextExtra(extra: object) {
     const sentryClient = io.sentry.Sentry.getStoredClient();
     Object.keys(extra).forEach(key => {
-      sentryClient.addExtra(key, extra[key].toString());
+      // adding type check to not force toString on the extra
+      // @link: https://github.com/danielgek/nativescript-sentry/issues/22
+      const nativeDataValue = Sentry._convertDataTypeToJavaObject(extra[key]);
+      sentryClient.addExtra(key, nativeDataValue);
     });
   }
 
@@ -137,6 +155,64 @@ export class Sentry {
       default:
         return io.sentry.event.Event.Level.INFO;
     }
+  }
+
+  /**
+   * Takes the provided value and checks for boolean or number and creates a native data type instance.
+   * @param value
+   */
+  private static _convertDataTypeToJavaObject(value) {
+    if (value === null) {
+      return null;
+    }
+
+    switch (typeof value) {
+      case 'object':
+        if (value instanceof Date) {
+          return new java.lang.String(value.toISOString());
+        }
+
+        if (Array.isArray(value)) {
+          const nativeList = new java.util.ArrayList();
+          value.forEach(data => {
+            nativeList.add(this._convertDataTypeToJavaObject(data));
+          });
+          return nativeList;
+        }
+
+        const nativeObject = new java.util.HashMap();
+        Object.keys(value).forEach(itemKey => {
+          nativeObject.put(itemKey, this._convertDataTypeToJavaObject(value[itemKey]));
+        });
+
+        return nativeObject;
+      case 'number':
+        if (this._numberIs64Bit(value)) {
+          if (this._numberHasDecimals(value)) {
+            return new java.lang.Double(value);
+          } else {
+            return new java.lang.Long(value);
+          }
+        } else {
+          if (this._numberHasDecimals(value)) {
+            return new java.lang.Float(value);
+          } else {
+            return new java.lang.Integer(value);
+          }
+        }
+      case 'boolean':
+        return new java.lang.Boolean(value);
+    }
+
+    return new java.lang.String(value);
+  }
+
+  private static _numberHasDecimals(value: number) {
+    return !(value % 1 === 0);
+  }
+
+  private static _numberIs64Bit(value: number) {
+    return value < -Math.pow(2, 31) + 1 || value > Math.pow(2, 31) - 1;
   }
 }
 
