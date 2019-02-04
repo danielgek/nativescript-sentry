@@ -7,6 +7,9 @@
     "id": "org.nativescript.demong",
     "tns-android": {
       "version": "5.1.0"
+    },
+    "tns-ios": {
+      "version": "5.1.1"
     }
   },
   "dependencies": {
@@ -23,11 +26,9 @@
     "nativescript-angular": "^7.2.0",
     "nativescript-sentry": "file:../src",
     "nativescript-theme-core": "~1.0.4",
-    "reflect-metadata": "~0.1.12",
-    "rxjs": "~6.3.3",
-    "rxjs-compat": "^6.3.3",
+    "rxjs": "~6.4.0",
     "tns-core-modules": "~5.1.2",
-    "zone.js": "~0.8.26"
+    "zone.js": "~0.8.29"
   },
   "devDependencies": {
     "babel-traverse": "6.26.0",
@@ -35,6 +36,6 @@
     "babylon": "6.18.0",
     "lazy": "1.0.11",
     "nativescript-dev-typescript": "~0.7.9",
-    "typescript": "~3.3.1"
+    "typescript": "^3.2.4"
   }
 }

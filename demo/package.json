@@ -2,29 +2,21 @@
   "nativescript": {
     "id": "org.nativescript.demo",
     "tns-android": {
-      "version": "4.2.0"
+      "version": "5.1.0"
     },
     "tns-ios": {
-      "version": "4.2.0"
+      "version": "5.1.1"
     }
   },
   "dependencies": {
     "nativescript-sentry": "file:../src",
     "nativescript-theme-core": "^1.0.4",
-    "nativescript-unit-test-runner": "^0.3.4",
-    "tns-core-modules": "^4.1.0"
+    "nativescript-unit-test-runner": "^0.4.1",
+    "tns-core-modules": "^5.1.2"
   },
   "devDependencies": {
-    "babel-traverse": "6.12.0",
-    "babel-types": "6.11.1",
-    "babylon": "6.8.4",
-    "filewalker": "0.1.2",
-    "jasmine-core": "^2.5.2",
-    "karma": "^1.3.0",
-    "karma-jasmine": "^1.0.2",
-    "karma-nativescript-launcher": "^0.4.0",
-    "lazy": "1.0.11",
-    "nativescript-dev-typescript": "0.7.2",
-    "typescript": "~2.8.2"
+    "nativescript-dev-typescript": "~0.7.9",
+    "nativescript-dev-webpack": "~0.19.1",
+    "typescript": "~3.2.4"
   }
 }
