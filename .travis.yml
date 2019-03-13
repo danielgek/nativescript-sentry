@@ -9,7 +9,7 @@ matrix:
     - stage: 'lint'
       language: node_js
       os: linux
-      node_js: '8'
+      node_js: '10'
       script:
         - cd src && npm run ci.tslint
         - cd ../demo && npm run ci.tslint
@@ -22,7 +22,7 @@ matrix:
         - Type="VanillaJS"
       osx_image: xcode10.0
       language: node_js
-      node_js: '8'
+      node_js: '10'
       jdk: oraclejdk8
       before_script: pod repo update
       script:
@@ -34,7 +34,7 @@ matrix:
         - Type="Angular"
       osx_image: xcode10.0
       language: node_js
-      node_js: '8'
+      node_js: '10'
       jdk: oraclejdk8
       before_script: pod repo update
       script:
@@ -90,7 +90,7 @@ matrix:
         - Type="VanillaJS"
       osx_image: xcode10.0
       language: node_js
-      node_js: '8'
+      node_js: '10'
       jdk: oraclejdk8
       before_script: pod repo update
       script:
@@ -103,7 +103,7 @@ matrix:
         - Type="Angular"
       osx_image: xcode10.0
       language: node_js
-      node_js: '8'
+      node_js: '10'
       jdk: oraclejdk8
       before_script: pod repo update
       script:
