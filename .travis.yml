@@ -1,20 +1,3 @@
-env:
-  global:
-    - ANDROID_PACKAGE_JS='picker-debug-js.apk'
-    - ANDROID_PACKAGE_NG='picker-debug-ng.apk'
-    - ANDROID_PACKAGE_VUE='picker-debug-vue.apk'
-    - ANDROID_PACKAGE_FOLDER_JS=$TRAVIS_BUILD_DIR/demo/outputs
-    - ANDROID_PACKAGE_FOLDER_NG=$TRAVIS_BUILD_DIR/demo-angular/outputs
-    - ANDROID_PACKAGE_FOLDER_VUE=$TRAVIS_BUILD_DIR/demo-vue/outputs
-    - ANDROID_SAUCE_STORAGE="https://saucelabs.com/rest/v1/storage/$SAUCE_USER"
-    - IOS_PACKAGE_JS='picker-demo-js.zip'
-    - IOS_PACKAGE_NG='picker-demo-ng.zip'
-    - IOS_PACKAGE_VUE='picker-demo-vue.zip'
-    - IOS_PACKAGE_FOLDER_JS=$TRAVIS_BUILD_DIR/demo/outputs
-    - IOS_PACKAGE_FOLDER_NG=$TRAVIS_BUILD_DIR/demo-angular/outputs
-    - IOS_PACKAGE_FOLDER_VUE=$TRAVIS_BUILD_DIR/demo-vue/outputs
-    - IOS_SAUCE_STORAGE="https://saucelabs.com/rest/v1/storage/$SAUCE_USER"
-
 git:
   depth: 1
 
