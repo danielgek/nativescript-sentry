@@ -31,7 +31,7 @@
     "plugin.prepare": "npm run build && cd ../demo && tns plugin remove nativescript-sentry && tns plugin add ../src",
     "plugin.ng.prepare": "npm run build && cd ../demo-ng && tns plugin remove nativescript-sentry && tns plugin add ../src",
     "clean": "npm run demo.reset && npx rimraf -- node_modules package-lock.json && npm i",
-    "ci.tslint": "npm i && tslint '**/*.ts' --config '../tslint.json' --exclude '**/node_modules/**' --exclude '**/platforms/**'",
+    "ci.tslint": "npm i && tslint '**/*.ts' --config '../tslint.json' --exclude '**/node_modules/**' --exclude '**/platforms/**' --exclude '**/typings/**'",
     "tslint.demo": "tslint --config '../tslint.json' '../demo/app/*.ts' --exclude '**/node_modules/**'",
     "precommit": "lint-staged",
     "setup": "npm run build && cd ../demo && npm i",
