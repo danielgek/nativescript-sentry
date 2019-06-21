@@ -1,5 +1,3 @@
-/// <reference path="./node_modules/tns-platform-declarations/android.d.ts" />
-
 declare namespace io {
   export namespace sentry {
     export class DefaultSentryClientFactory extends io.sentry.SentryClientFactory {

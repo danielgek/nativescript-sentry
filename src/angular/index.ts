@@ -1,2 +1,2 @@
 export { SentryConfig, SentryModule } from './app.module';
-export * from './error.handler';
+export { SentryErrorHandler } from './error.handler';

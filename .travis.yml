@@ -1,33 +1,137 @@
+git:
+  depth: 1
+
+branches:
+  only:
+    - master
 matrix:
   include:
-    - os: linux
-      language: android
-      jdk: oraclejdk8
-      before_script:
-        - echo no | android create avd --force -n test -t android-21 -b armeabi-v7a
-        - emulator -avd test -no-audio -no-window &
-        - android-wait-for-emulator
-      before_install:
-        - nvm install 6
-      script: npm run test.android
-    - os: osx
+    - stage: 'lint'
       language: node_js
-      node_js: "6"
+      os: linux
+      node_js: '10'
+      script:
+        - cd src && npm run ci.tslint
+        - cd ../demo && npm run ci.tslint
+        - cd ../demo-ng && npm run ci.tslint
+
+    - stage: 'WebPack and Build'
+      os: osx
+      env:
+        - WebpackiOS="12.0"
+        - Type="VanillaJS"
+      osx_image: xcode10.0
+      language: node_js
+      node_js: '10'
       jdk: oraclejdk8
-      osx_image: xcode8.3
-      script: npm run test.ios
+      before_script: pod repo update
+      script:
+        - cd src && npm run build
+        - cd ../demo && npm i && tns build ios --bundle --env.uglify
+    - os: osx
+      env:
+        - WebpackiOS="12.0"
+        - Type="Angular"
+      osx_image: xcode10.0
+      language: node_js
+      node_js: '10'
+      jdk: oraclejdk8
+      before_script: pod repo update
+      script:
+        - cd src && npm run build && npm pack
+        - cd ../demo-ng && tns plugin add ../src/*.tgz
+        - npm i && tns build ios --bundle --env.uglify --env.aot
+    - language: android
+      os: linux
+      env:
+        - WebpackAndroid="28"
+        - Type="VanillaJS"
+      jdk: oraclejdk8
+      before_install: nvm install 8
+      script:
+        - cd src && npm run build
+        - cd ../demo && npm i && tns build android --bundle --env.uglify --env.snapshot"
+    - language: android
+      os: linux
+      env:
+        - WebpackAndroid="28"
+        - Type="Angular"
+      jdk: oraclejdk8
+      before_install: nvm install 8
+      script:
+        - cd src && npm run build
+        - cd ../publish && sh pack.sh
+        - cd ../demo-ng && tns plugin add ../publish/package/*.tgz
+        - npm i && tns build android --bundle --env.uglify --env.snapshot --env.aot --copy-to
+    - language: android
+      env:
+        - BuildAndroid="28"
+        - Type="VanillaJS"
+      os: linux
+      jdk: oraclejdk8
+      before_install: nvm install 8.11.4
+      script:
+        - cd src && npm run build
+        - cd ../demo && tns build android
+    - language: android
+      env:
+        - BuildAndroid="28"
+        - Type="Angular"
+      os: linux
+      jdk: oraclejdk8
+      before_install: nvm install 8.11.4
+      script:
+        - cd src && npm run build
+        - cd ../demo-ng && tns build android
+    - os: osx
+      env:
+        - BuildiOS="12.0"
+        - Xcode="10.0"
+        - Type="VanillaJS"
+      osx_image: xcode10.0
+      language: node_js
+      node_js: '10'
+      jdk: oraclejdk8
+      before_script: pod repo update
+      script:
+        - cd src && npm run build
+        - cd ../demo && tns build ios --bundle --env.uglify
+    - os: osx
+      env:
+        - BuildiOS="12.0"
+        - Xcode="10.0"
+        - Type="Angular"
+      osx_image: xcode10.0
+      language: node_js
+      node_js: '10'
+      jdk: oraclejdk8
+      before_script: pod repo update
+      script:
+        - cd src && npm run build
+        - cd ../demo-ng && tns build ios
 
 android:
   components:
     - tools
     - platform-tools
-    - build-tools-23.0.2
-    - android-23
+    - build-tools-28.0.3
+    - android-28
     - extra-android-m2repository
-    - sys-img-armeabi-v7a-android-21
+
+before_cache:
+  - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+
+cache:
+  directories:
+    - .nvm
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+
+before_install:
+  - sudo pip install --upgrade pip
+  - sudo pip install six
 
 install:
-    - npm install -g nativescript
-    - tns usage-reporting disable
-    - tns error-reporting disable
-    - cd src
+  - echo no | npm install -g nativescript
+  - tns usage-reporting disable
+  - tns error-reporting disable

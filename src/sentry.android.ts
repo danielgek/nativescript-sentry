@@ -2,7 +2,7 @@
 /// <reference path="./typings/sentry-api.android.d.ts" />
 
 import * as utils from 'tns-core-modules/utils/utils';
-import { BreadCrumb, ExceptionOptions, MessageOptions, SentryUser } from './index';
+import { BreadCrumb, ExceptionOptions, MessageOptions, SentryUser } from './';
 
 export class Sentry {
   public static init(dsn: string) {

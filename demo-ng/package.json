@@ -1,41 +1,43 @@
 {
-  "description": "NativeScript Application",
-  "license": "SEE LICENSE IN <your-license-filename>",
-  "readme": "NativeScript Application",
-  "repository": "<fill-your-repository-here>",
   "nativescript": {
     "id": "org.nativescript.demong",
     "tns-android": {
-      "version": "5.1.0"
+      "version": "5.2.1"
     },
     "tns-ios": {
-      "version": "5.1.1"
+      "version": "5.2.0"
     }
   },
+  "description": "NativeScript Application",
+  "scripts": {
+    "build.plugin": "cd ../src && npm run build",
+    "ci.tslint": "npm i && tslint --config '../tslint.json' 'src/**/*.ts'"
+  },
   "dependencies": {
-    "@angular/animations": "^7.2.3",
-    "@angular/common": "^7.2.3",
-    "@angular/compiler": "^7.2.3",
-    "@angular/core": "^7.2.3",
-    "@angular/forms": "^7.2.3",
-    "@angular/http": "^7.2.3",
-    "@angular/platform-browser": "^7.2.3",
-    "@angular/platform-browser-dynamic": "^7.2.3",
-    "@angular/platform-server": "^7.2.3",
-    "@angular/router": "^7.2.3",
-    "nativescript-angular": "^7.2.0",
+    "@angular/animations": "~7.2.8",
+    "@angular/common": "~7.2.8",
+    "@angular/compiler": "~7.2.8",
+    "@angular/core": "~7.2.8",
+    "@angular/forms": "~7.2.8",
+    "@angular/http": "~7.2.8",
+    "@angular/platform-browser": "~7.2.8",
+    "@angular/platform-browser-dynamic": "~7.2.8",
+    "@angular/router": "~7.2.8",
+    "nativescript-angular": "~7.2.2",
     "nativescript-sentry": "file:../src",
     "nativescript-theme-core": "~1.0.4",
+    "reflect-metadata": "~0.1.13",
     "rxjs": "~6.4.0",
-    "tns-core-modules": "~5.1.2",
+    "tns-core-modules": "~5.2.2",
     "zone.js": "~0.8.29"
   },
   "devDependencies": {
-    "babel-traverse": "6.26.0",
-    "babel-types": "6.26.0",
-    "babylon": "6.18.0",
-    "lazy": "1.0.11",
-    "nativescript-dev-typescript": "~0.7.9",
-    "typescript": "^3.2.4"
-  }
+    "@nativescript/schematics": "~0.5.1",
+    "nativescript-dev-typescript": "~0.9.0",
+    "nativescript-dev-webpack": "~0.20.2",
+    "@angular/compiler-cli": "~7.2.8",
+    "@ngtools/webpack": "~7.3.5",
+    "tslint": "~5.14.0"
+  },
+  "readme": "NativeScript PickerField Demo NG"
 }

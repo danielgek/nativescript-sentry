@@ -23,7 +23,6 @@
         "baseUrl": ".",
         "paths": {
             "*": [
-                "./node_modules/tns-core-modules/*",
                 "./node_modules/*"
             ],
             "~/*": [
@@ -31,7 +30,12 @@
             ]
         }
     },
+    "include": [
+        "../src",
+        "**/*"
+    ],
     "exclude": [
+        "../src/node_modules",
         "node_modules",
         "platforms"
     ],

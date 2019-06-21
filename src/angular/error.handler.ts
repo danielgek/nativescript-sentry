@@ -6,8 +6,8 @@ import { SentryService } from './app.module';
 export class SentryErrorHandler extends ErrorHandler {
   constructor(@Inject(SentryService) private config) {
     super();
-    if (config && config.dsn) {
-      Sentry.init(config.dsn);
+    if (this.config && this.config.dsn) {
+      Sentry.init(this.config.dsn);
     } else {
       throw '[SentryAngular]: You need to provide your dsn on the forRoot method';
     }
