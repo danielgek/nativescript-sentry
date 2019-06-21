@@ -30,14 +30,14 @@
     margin="10 4 10 4"
   ></Label>
   <Button
+    (tap)="onTapTryThrow()"
+    class="btn btn-primary"
+    text="Try trow without Error test"
+  ></Button>
+  <Button
     (tap)="onTapTryError()"
     class="btn btn-primary"
     text="Try trow with Error test"
-  ></Button>
-  <Button
-    (tap)="onTapTry()"
-    class="btn btn-primary"
-    text="Try trow without Error test"
   ></Button>
   <Button
     (tap)="onTapMessage()"

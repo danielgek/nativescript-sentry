@@ -95,4 +95,6 @@ export abstract class Sentry {
    * The current context is created during the `init` execution.
    */
   static clearContext(): void;
+
+  static nativeCrash(): void;
 }

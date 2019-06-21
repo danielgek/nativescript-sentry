@@ -10,6 +10,7 @@ export declare class Sentry {
   static setContextExtra(extra: any): void;
   static clearContext(): void;
   private static _convertSentryLevel;
+  private static nativeCrash;
 }
 export declare enum Level {
   Fatal = 'fatal',

@@ -1,6 +1,7 @@
 /// <reference path="./node_modules/tns-platform-declarations/ios.d.ts" />
 /// <reference path="./typings/sentry-api.ios.d.ts" />
 
+import * as application from 'tns-core-modules/application';
 import { BreadCrumb, ExceptionOptions, MessageOptions, SentryUser } from './';
 
 export class Sentry {
@@ -8,6 +9,14 @@ export class Sentry {
     SentryClient.sharedClient = SentryClient.alloc().initWithDsnDidFailWithError(dsn);
     SentryClient.sharedClient.startCrashHandlerWithError();
     SentryClient.sharedClient.enableAutomaticBreadcrumbTracking();
+    application.on(application.uncaughtErrorEvent, args => {
+      try {
+        // SentryJavaScriptBridgeHelper.parseJavaScriptStacktrace(args.ios);
+        // SentryClient.sharedClient.
+      } catch (e) {
+        console.log('[Sentry - iOS] Exeption on uncaughtErrorEvent: ', e);
+      }
+    });
   }
 
   public static captureMessage(message: string, options?: MessageOptions) {
@@ -25,6 +34,7 @@ export class Sentry {
     }
     SentryClient.sharedClient.sendEventWithCompletionHandler(event, () => {
       // nothing here
+      console.log('sended');
     });
   }
 
@@ -107,6 +117,10 @@ export class Sentry {
       default:
         return SentrySeverity.kSentrySeverityInfo;
     }
+  }
+
+  private static nativeCrash() {
+    SentryClient.sharedClient.crash();
   }
 }
 

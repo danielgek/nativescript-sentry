@@ -5,5 +5,5 @@ android {
 }
 
 dependencies {
-    implementation 'io.sentry:sentry-android:1.7.21'
+    implementation 'io.sentry:sentry-android:1.7.23'
 }

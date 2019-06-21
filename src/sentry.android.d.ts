@@ -3,7 +3,7 @@ import { BreadCrumb, ExceptionOptions, MessageOptions, SentryUser } from './';
 export declare class Sentry {
   static init(dsn: string): void;
   static captureMessage(message: string, options?: MessageOptions): void;
-  static captureException(exception: Error, options?: ExceptionOptions): void;
+  static captureException(exception: Error | NativeScriptError, options?: ExceptionOptions): void;
   static captureBreadcrumb(breadcrumb: BreadCrumb): void;
   static setContextUser(user: SentryUser): void;
   static setContextTags(tags: object): void;
@@ -14,6 +14,9 @@ export declare class Sentry {
   private static _convertDataTypeToJavaObject;
   private static _numberHasDecimals;
   private static _numberIs64Bit;
+  private static _parseStackTrace;
+  private static _parseLine;
+  private static nativeCrash;
 }
 export declare enum Level {
   Fatal = 'fatal',

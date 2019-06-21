@@ -15,10 +15,13 @@ export class SentryErrorHandler extends ErrorHandler {
 
   handleError(err): void {
     try {
-      Sentry.captureException(err);
+      if (err instanceof Error) {
+        Sentry.captureException(err);
+      } else {
+        Sentry.captureException(new Error(err));
+      }
     } catch (e) {
       console.log('[NativeScript-Sentry - SentryErrorHandler]', e);
     }
-    throw err;
   }
 }

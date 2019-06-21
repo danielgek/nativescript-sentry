@@ -2,14 +2,29 @@
 /// <reference path="./typings/sentry-api.android.d.ts" />
 
 import * as utils from 'tns-core-modules/utils/utils';
+import * as application from 'tns-core-modules/application';
 import { BreadCrumb, ExceptionOptions, MessageOptions, SentryUser } from './';
+const STACKTRACE_REGX = /^\s*at (.*?) ?\(((?:file|https?|blob|ng|native|eval|webpack|<anonymous>|\/).*?)(?::(\d+))?(?::(\d+))?\).*$/i;
 
 export class Sentry {
   public static init(dsn: string) {
     // this is all the setup you need for android to handle uncaught exceptions
     // @link - https://forum.sentry.io/t/android-uncaught-exception/1764/2
     // @link - https://docs.sentry.io/clients/java/modules/android/#features
-    io.sentry.Sentry.init(dsn, new io.sentry.android.AndroidSentryClientFactory(utils.ad.getApplicationContext()));
+    io.sentry.Sentry.init(dsn);
+    application.on(application.uncaughtErrorEvent, args => {
+      try {
+        if (args.android && args.android.nativeException.toString())
+          this.captureException({
+            message: 'E daqqqqqqiuiuiuiui' + args.android.message,
+            stack: args.android.nativeException.toString(),
+            name: null
+          });
+        else this.captureException(args);
+      } catch (e) {
+        console.log('[Sentry - iOS] Exeption on uncaughtErrorEvent: ', e);
+      }
+    });
   }
 
   public static captureMessage(message: string, options?: MessageOptions) {
@@ -34,7 +49,7 @@ export class Sentry {
     io.sentry.Sentry.getStoredClient().sendEvent(event);
   }
 
-  public static captureException(exception: Error, options?: ExceptionOptions) {
+  public static captureException(exception: Error | NativeScriptError, options?: ExceptionOptions) {
     // TODO: attach tags and extra directly on the exeption
     if (options && options.extra) {
       this.setContextExtra(options.extra);
@@ -43,14 +58,33 @@ export class Sentry {
     if (options && options.tags) {
       this.setContextTags(options.tags);
     }
+    if (!exception.stack) {
+      // TODO: error dont have a stacktrace
+      return;
+    }
+    const parsedJSStackTrace = this._parseStackTrace(exception);
 
-    const cause = new java.lang.Throwable(exception.stack);
+    const stackTraceInterface = new io.sentry.event.interfaces.StackTraceInterface(parsedJSStackTrace);
+    const exceptions = new java.util.ArrayDeque();
+    if ((exception as NativeScriptError).nativeError) {
+      exceptions.push(
+        new io.sentry.event.interfaces.SentryException(
+          (exception as NativeScriptError).nativeError,
+          '',
+          '',
+          stackTraceInterface
+        )
+      );
+    } else {
+      exceptions.push(new io.sentry.event.interfaces.SentryException(exception.message, '', '', stackTraceInterface));
+    }
 
-    // creating a new Exception to send to Sentry which will include the
-    // JS Error stacktrace as the "cause" and the JS Error message as the Throwable "message"
-    // https://developer.android.com/reference/java/lang/Exception.html#Exception(java.lang.String,%20java.lang.Throwable)
-    const ex = new java.lang.Exception(exception.message, cause);
-    io.sentry.Sentry.getStoredClient().sendException(ex);
+    const eventBuilder = new io.sentry.event.EventBuilder()
+      .withMessage(exception.message)
+      .withLevel(io.sentry.event.Event.Level.ERROR)
+      .withSentryInterface(new io.sentry.event.interfaces.ExceptionInterface(exceptions))
+      .build();
+    io.sentry.Sentry.getStoredClient().sendEvent(eventBuilder);
   }
 
   public static captureBreadcrumb(breadcrumb: BreadCrumb) {
@@ -213,6 +247,55 @@ export class Sentry {
 
   private static _numberIs64Bit(value: number) {
     return value < -Math.pow(2, 31) + 1 || value > Math.pow(2, 31) - 1;
+  }
+
+  private static _parseStackTrace(error: Error) {
+    const lines = error.stack.split('\n');
+    let stackArray = new Array<io.sentry.event.interfaces.SentryStackTraceElement>();
+    const elements = lines.reduce((stack, line) => {
+      const frame = this._parseLine(line);
+
+      if (frame) {
+        stackArray.push(
+          new io.sentry.event.interfaces.SentryStackTraceElement(
+            '',
+            frame.methodName,
+            frame.file,
+            frame.lineNumber,
+            new java.lang.Integer(frame.column),
+            frame.file,
+            'javascript',
+            null
+          )
+        );
+      }
+
+      return stack;
+    }, stackArray);
+
+    const synthStackTrace = Array.create(io.sentry.event.interfaces.SentryStackTraceElement, elements.length);
+    elements.forEach((el, index) => {
+      synthStackTrace[index] = el;
+    });
+    return synthStackTrace;
+  }
+
+  private static _parseLine(line: string) {
+    const parts = STACKTRACE_REGX.exec(line);
+
+    if (!parts) {
+      return null;
+    }
+    return {
+      file: parts[2] || null,
+      methodName: parts[1],
+      lineNumber: +parts[3] || null,
+      column: +parts[4] || null
+    };
+  }
+
+  private static nativeCrash() {
+    throw new java.lang.Exception('Native exeption');
   }
 }
 

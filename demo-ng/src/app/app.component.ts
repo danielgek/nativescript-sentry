@@ -37,43 +37,18 @@ export class AppComponent {
   }
 
   onTapNative() {
-    throw "Uncaught Error Exception thrown inside NativeScript app.";
+    // TODO: add sentry native crash
+    Sentry.nativeCrash();
   }
 
-  onTapTry() {
-    try {
-      throw new Error("Oh No! Something went wrong.");
-    } catch (error) {
-      Sentry.captureException(error, {
-        tags: {
-          exception: 17227,
-          app_name: "sentry-demo"
-        },
-        extra: {
-          number_extra: 1,
-          bool_extra: true,
-          string_extra: "oh snap!"
-        }
-      });
-    }
+  onTapTryThrow() {
+    // TODO: this is catched two times because of herror handler
+    throw "Oh No! Something went wrong! (throw)";
   }
 
   onTapTryError() {
-    try {
-      throw new Error("Oh No! Something went wrong.");
-    } catch (error) {
-      Sentry.captureException(error, {
-        tags: {
-          exception: 18219,
-          app_name: "sentry-demo"
-        },
-        extra: {
-          number_extra: 1,
-          bool_extra: true,
-          string_extra: "oh snap!"
-        }
-      });
-    }
+      throw new Error("Oh No! Something went wrong! throwing (new Error)");
+  
   }
 
   onTapMessage() {
@@ -106,14 +81,17 @@ export class AppComponent {
 
   onTapCaptureWithExtras() {
     try {
-      throw new Error("try catch exeption example");
+      throw new Error("try catch exeption with extras");
     } catch (error) {
       Sentry.captureException(error, {
         tags: {
-          tagevent: "tageventvalue"
+          exception: 17227,
+          app_name: "sentry-demo"
         },
         extra: {
-          extraevent: "extraeventvalue"
+          number_extra: 1,
+          bool_extra: true,
+          string_extra: "oh snap!"
         }
       });
     }

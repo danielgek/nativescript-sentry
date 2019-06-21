@@ -62,7 +62,7 @@ matrix:
         - cd src && npm run build
         - cd ../publish && sh pack.sh
         - cd ../demo-ng && tns plugin add ../publish/package/*.tgz
-        - npm i && tns build android --bundle --env.uglify --env.snapshot --env.aot --copy-to
+        - npm i && tns build android --bundle --env.uglify --env.snapshot --env.aot
     - language: android
       env:
         - BuildAndroid="28"
