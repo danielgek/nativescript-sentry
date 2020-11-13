@@ -1,3 +1,5 @@
+# This project is not mantained anymore, check this one out [https://github.com/FinanzRitter/nativescript-sentry](https://github.com/FinanzRitter/nativescript-sentry)
+
 # Sentry.io for NativeScript
 
 [![npm](https://img.shields.io/npm/v/nativescript-sentry.svg)](https://www.npmjs.com/package/nativescript-sentry)
